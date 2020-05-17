@@ -1,9 +1,8 @@
 const Discord = require('discord.js');
-const {prefix, token} = require('./config.json');
+const {prefix, token, mongodburl} = require('./config/config.json');
 const client = new Discord.Client();
 
 const fs = require('fs');
-client.userData = require('./userData.json');
 client.commands = new Discord.Collection;
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -11,6 +10,15 @@ for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
 };
+
+const MongoClient = require('mongodb').MongoClient;
+var mongoClient;
+MongoClient.connect(mongodburl, {useNewUrlParser: true, useUnifiedTopology:true}, (err, client) => {
+    if (err) throw err;
+    mongoClient = client;
+});
+const mongodb_update = require('./db/mongodb_update');
+const mongodb_read = require('./db/mongodb_read');
 
 client.login(token);
 
@@ -28,19 +36,25 @@ client.once('ready', () => {
     catch {
         console.error;
     };
-    console.log('client is ready');
+    console.log('client is ready'); 
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
     if (user.bot) return;
 
-    let author = reaction.message.author;
-
     if (reaction.emoji.name === '👍') {
-        updateUserData(author, 1, 1, 0);
+        mongodb_update.update(mongoClient,
+            reaction.message.guild.id,
+            reaction.message.channel.id,
+            reaction.message.author.id,
+            1, 1, 0);
     }
     else if (reaction.emoji.name === '👎') {
-        updateUserData(author, -1, 0, 1);
+        mongodb_update.update(mongoClient,
+            reaction.message.guild.id,
+            reaction.message.channel.id,
+            reaction.message.author.id,
+            -1, 0, 1);
     };
 });
 client.on('messageReactionRemove', (reaction, user) => {
@@ -49,30 +63,20 @@ client.on('messageReactionRemove', (reaction, user) => {
     let author = reaction.message.author;
 
     if (reaction.emoji.name === '👍') {
-        updateUserData(author, -1, -1, 0);
+        mongodb_update.update(mongoClient,
+            reaction.message.guild.id,
+            reaction.message.channel.id,
+            reaction.message.author.id,
+            -1, -1, 0);
     }
     else if (reaction.emoji.name === '👎') {
-        updateUserData(author, 1, 0, -1);
+        mongodb_update.update(mongoClient,
+            reaction.message.guild.id,
+            reaction.message.channel.id,
+            reaction.message.author.id,
+            1, 0, -1);
     };
 });
-
-function updateUserData(author, scoreChange, upvotesChange, downvotesChange) {
-    if (!client.userData[author.id]) {
-        client.userData[author.id] = {
-            score: 0,
-            upvotes: 0,
-            downvotes: 0
-        };
-    };
-    client.userData[author.id] = {
-        score: client.userData[author.id].score + scoreChange,
-        upvotes: client.userData[author.id].upvotes + upvotesChange,
-        downvotes: client.userData[author.id].downvotes + downvotesChange
-    };
-    fs.writeFile('./userData.json', JSON.stringify(client.userData, null, 4), err => {
-        if (err) throw err;
-    });
-};
 
 client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;

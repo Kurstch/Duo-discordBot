@@ -1,0 +1,5 @@
+{
+    "prefix": "_",
+    "token": "add your token here",
+    "mongodburl": "MongoDB url"
+}
