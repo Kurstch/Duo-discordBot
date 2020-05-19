@@ -1,49 +1,64 @@
 module.exports = {
     name: 'score',
-    description: 'display user score, upvotes, downvotes',
+    description: 'Replies with user(s) score, upvotes, downvotes',
     aliases: ['upvotes', 'downvotes'],
     execute(message, args, discordClient) {
-        if (!message.mentions.users.size) {
-            discordClient.mongodb_read.read(
-                discordClient.mongoClient,
-                message.guild.id,
-                'Users',
-                {_id: message.author.id}
-            )
-            .then(data => {
-                if (Object.keys(data).length === 0) {
-                    sendMessage(`Could not find Your score, sorry!`);
-                }
-                else {
-                    sendMessage(`Your score is \`${data[message.author.id].score}\`, upvotes: \`${data[message.author.id].upvotes}\`, downvotes: \`${data[message.author.id].downvotes}\``);
-                };
-            })
-            .catch(err => {console.error(err)});
+        if (message.channel.type === 'dm') {
+            return message.channel.send('You must ask for score in the server for witch you want to get the score');
+        };
+
+        const mongoClient = discordClient.mongoClient;
+        const mongodb = message.guild.id;
+        var mongoCollection;
+        var mongoFilter;
+        var hasMentions;
+        var reply;
+
+        // Set mongoCollection & hasMentions value
+        if (!message.mentions.channels.size) {
+            mongoCollection = 'Users';
         }
         else {
-            var ids = [];
-            message.mentions.users.map(user => {
-                ids.push(user.id)
-            });
-            discordClient.mongodb_read.read(
-                discordClient.mongoClient,
-                message.guild.id,
-                message.channel.id,
-                {_id: {$in: ids}},
-            )
-            .then(data => {
-                //check if data has been returned for each user
-
-                // send message with reply
-            })
-            .catch(err => {console.error(err)});
-        }
-
-        function sendMessage(reply) {
-            if (args.includes('DM')) {
-                return message.author.send(reply);
+            if (message.mentions.channels.size > 1) {
+                return message.channel.send('Please only mentione one channel');
             }
-            return message.channel.send(reply);
+            mongoCollection = message.mentions.channels.first().id;
+        };
+
+        //Set mongoFilter value
+        if (!message.mentions.users.size) {
+            mongoFilter = {_id: message.author.id};
+            hasMentions = false;
         }
+        else {
+            const array = message.mentions.users.map(user => {
+                return user.id;
+            })
+            mongoFilter = {_id: {$in: array}};
+            hasMentions = true;
+        };
+
+        // Ask for data and process it
+        discordClient.mongodb_read.read(
+            mongoClient,
+            mongodb,
+            mongoCollection,
+            mongoFilter
+        )
+        .then(data => {
+            if (hasMentions) {
+                reply = message.mentions.users.map(user => {
+                    if (!data[user.id]) {
+                        return `Could not find ${user.username}'s score`;
+                    }
+                    return `${user.username}'s score is \`${data[user.id].score}\`, upvotes: \`${data[user.id].upvotes}\`, downvotes: \`${data[user.id].downvotes}\``;
+                });
+            }
+            else {
+                reply = `Your score is \`${data[message.author.id].score}\`, upvotes: \`${data[message.author.id].upvotes}\`, downvotes: \`${data[message.author.id].downvotes}\``;
+            };
+            return message.channel.send(reply);
+        })
+        .catch(console.error);
     },
 };
