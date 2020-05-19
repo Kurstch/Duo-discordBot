@@ -1,31 +1,30 @@
 const Discord = require('discord.js');
 const {prefix, token, mongodburl} = require('./config/config.json');
-const client = new Discord.Client();
+const discordClient = new Discord.Client();
 
 const fs = require('fs');
-client.commands = new Discord.Collection;
+discordClient.commands = new Discord.Collection;
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
+    discordClient.commands.set(command.name, command);
 };
 
 const MongoClient = require('mongodb').MongoClient;
-var mongoClient;
-MongoClient.connect(mongodburl, {useNewUrlParser: true, useUnifiedTopology:true}, (err, client) => {
+ MongoClient.connect(mongodburl, {useNewUrlParser: true, useUnifiedTopology:true}, (err, client) => {
     if (err) throw err;
-    mongoClient = client;
+    discordClient.mongoClient = client;
 });
-const mongodb_update = require('./db/mongodb_update');
-const mongodb_read = require('./db/mongodb_read');
+discordClient.mongodb_update = require('./db/mongodb_update');
+discordClient.mongodb_read = require('./db/mongodb_read');
 
-client.login(token);
+discordClient.login(token);
 
-client.once('ready', () => {
+discordClient.once('ready', () => {
     //get all messages
     try {
-        let channels = client.channels.cache.filter(c => c.type == 'text').array();
+        let channels = discordClient.channels.cache.filter(c => c.type == 'text').array();
         for (let channel of channels) {
             channel.fetch()
             .then(c => {
@@ -39,38 +38,38 @@ client.once('ready', () => {
     console.log('client is ready'); 
 });
 
-client.on('messageReactionAdd', (reaction, user) => {
+discordClient.on('messageReactionAdd', (reaction, user) => {
     if (user.bot) return;
 
     if (reaction.emoji.name === '👍') {
-        mongodb_update.update(mongoClient,
+        discordClient.mongodb_update.update(discordClient.mongoClient,
             reaction.message.guild.id,
             reaction.message.channel.id,
             reaction.message.author.id,
             1, 1, 0);
     }
     else if (reaction.emoji.name === '👎') {
-        mongodb_update.update(mongoClient,
+        discordClient.mongodb_update.update(discordClient.mongoClient,
             reaction.message.guild.id,
             reaction.message.channel.id,
             reaction.message.author.id,
             -1, 0, 1);
     };
 });
-client.on('messageReactionRemove', (reaction, user) => {
+discordClient.on('messageReactionRemove', (reaction, user) => {
     if (user.bot) return;
 
     let author = reaction.message.author;
 
     if (reaction.emoji.name === '👍') {
-        mongodb_update.update(mongoClient,
+        discordClient.mongodb_update.update(discordClient.mongoClient,
             reaction.message.guild.id,
             reaction.message.channel.id,
             reaction.message.author.id,
             -1, -1, 0);
     }
     else if (reaction.emoji.name === '👎') {
-        mongodb_update.update(mongoClient,
+        discordClient.mongodb_update.update(discordClient.mongoClient,
             reaction.message.guild.id,
             reaction.message.channel.id,
             reaction.message.author.id,
@@ -78,15 +77,15 @@ client.on('messageReactionRemove', (reaction, user) => {
     };
 });
 
-client.on('message', message => {
+discordClient.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
 
     // check if command exists, check for aliases
-    const command = client.commands.get(commandName)
-		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+    const command = discordClient.commands.get(commandName)
+		|| discordClient.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
     if (!command) return;
 
@@ -102,7 +101,7 @@ client.on('message', message => {
     }
 
     try {
-        command.execute(message, args, client);
+        command.execute(message, args, discordClient);
     }
     catch (err) {
         console.log(message.content);
