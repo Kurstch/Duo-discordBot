@@ -16,8 +16,7 @@ const MongoClient = require('mongodb').MongoClient;
     if (err) throw err;
     discordClient.mongoClient = client;
 });
-discordClient.mongodb_update = require('./db/mongodb_update');
-discordClient.mongodb_read = require('./db/mongodb_read');
+discordClient.mongodb = require('./db/mongodb');
 
 discordClient.login(token);
 
@@ -42,14 +41,14 @@ discordClient.on('messageReactionAdd', (reaction, user) => {
     if (user.bot) return;
 
     if (reaction.emoji.name === '👍') {
-        discordClient.mongodb_update.update(discordClient.mongoClient,
+        discordClient.mongodb.update(discordClient.mongoClient,
             reaction.message.guild.id,
             reaction.message.channel.id,
             reaction.message.author.id,
             1, 1, 0);
     }
     else if (reaction.emoji.name === '👎') {
-        discordClient.mongodb_update.update(discordClient.mongoClient,
+        discordClient.mongodb.update(discordClient.mongoClient,
             reaction.message.guild.id,
             reaction.message.channel.id,
             reaction.message.author.id,
@@ -62,14 +61,14 @@ discordClient.on('messageReactionRemove', (reaction, user) => {
     let author = reaction.message.author;
 
     if (reaction.emoji.name === '👍') {
-        discordClient.mongodb_update.update(discordClient.mongoClient,
+        discordClient.mongodb.update(discordClient.mongoClient,
             reaction.message.guild.id,
             reaction.message.channel.id,
             reaction.message.author.id,
             -1, -1, 0);
     }
     else if (reaction.emoji.name === '👎') {
-        discordClient.mongodb_update.update(discordClient.mongoClient,
+        discordClient.mongodb.update(discordClient.mongoClient,
             reaction.message.guild.id,
             reaction.message.channel.id,
             reaction.message.author.id,

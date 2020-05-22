@@ -39,7 +39,7 @@ module.exports = {
         };
 
         // Ask for data and process it
-        discordClient.mongodb_read.read(
+        discordClient.mongodb.read(
             mongoClient,
             mongodb,
             mongoCollection,

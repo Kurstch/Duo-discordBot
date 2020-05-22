@@ -27,7 +27,7 @@ module.exports = {
             embedTitle = `${message.mentions.channels.first().name} channel leaderboard`
         };
 
-        discordClient.mongodb_read.read(
+        discordClient.mongodb.read(
             mongoClient,
             mongodb,
             mongoCollection,
