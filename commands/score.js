@@ -20,7 +20,7 @@ module.exports = {
         }
         else {
             if (message.mentions.channels.size > 1) {
-                return message.channel.send('Please only mentione one channel');
+                return message.channel.send('Please only mention only one channel');
             }
             mongoCollection = message.mentions.channels.first().id;
         };
@@ -46,16 +46,20 @@ module.exports = {
             mongoFilter
         )
         .then(data => {
+            if (!data.length) {
+            return message.channel.send('I could not find anything, sorry!');
+            };
             if (hasMentions) {
                 reply = message.mentions.users.map(user => {
-                    if (!data[user.id]) {
+                    if (!data.some(e => e._id == user.id)) {
                         return `Could not find ${user.username}'s score`;
-                    }
-                    return `${user.username}'s score is \`${data[user.id].score}\`, upvotes: \`${data[user.id].upvotes}\`, downvotes: \`${data[user.id].downvotes}\``;
+                    };
+                    let userData = data.find(e => e._id == user.id);
+                    return `${user.username}'s score is \`${userData.score}\`, upvotes: \`${userData.upvotes}\`, downvotes: \`${userData.downvotes}\``;
                 });
             }
             else {
-                reply = `Your score is \`${data[message.author.id].score}\`, upvotes: \`${data[message.author.id].upvotes}\`, downvotes: \`${data[message.author.id].downvotes}\``;
+                reply = `Your score is \`${data[0].score}\`, upvotes: \`${data[0].upvotes}\`, downvotes: \`${data[0].downvotes}\``;
             };
             return message.channel.send(reply);
         })
