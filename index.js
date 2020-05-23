@@ -1,5 +1,7 @@
+//#region initialize variables
+
 const Discord = require('discord.js');
-const {prefix, token, mongodburl} = require('./config/config.json');
+const {prefix, upvoteEmoji, downvoteEmoji, token, mongodburl} = require('./config/config.json');
 const discordClient = new Discord.Client();
 
 const fs = require('fs');
@@ -17,6 +19,8 @@ const MongoClient = require('mongodb').MongoClient;
     discordClient.mongoClient = client;
 });
 discordClient.mongodb = require('./db/mongodb');
+
+//#endregion
 
 discordClient.login(token);
 
@@ -38,43 +42,63 @@ discordClient.once('ready', () => {
 });
 
 discordClient.on('messageReactionAdd', (reaction, user) => {
-    if (user.bot) return;
+    if (user.bot || user === reaction.message.author || reaction.message.author.bot) return;
 
-    if (reaction.emoji.name === '👍') {
-        discordClient.mongodb.update(discordClient.mongoClient,
-            reaction.message.guild.id,
-            reaction.message.channel.id,
-            reaction.message.author.id,
-            1, 1, 0);
+    var change;
+
+    if (upvoteEmoji.includes(reaction.emoji.name)) {
+        change = [1, 1, 0]
     }
-    else if (reaction.emoji.name === '👎') {
-        discordClient.mongodb.update(discordClient.mongoClient,
-            reaction.message.guild.id,
-            reaction.message.channel.id,
-            reaction.message.author.id,
-            -1, 0, 1);
-    };
+    else if (downvoteEmoji.includes(reaction.emoji.name)) {
+        change = [-1, 0, 1]
+    }
+    else return;
+
+    updateUserData(
+        reaction.message.guild.id,
+        reaction.message.channel.id,
+        {_id: reaction.message.author.id},
+        {$inc: {score: change[0], upvotes: change[1], downvotes: change[2]}}
+    );
 });
+
 discordClient.on('messageReactionRemove', (reaction, user) => {
-    if (user.bot) return;
+    if (user.bot || user === reaction.message.author || reaction.message.author.bot) return;
 
-    let author = reaction.message.author;
+    var change;
 
-    if (reaction.emoji.name === '👍') {
-        discordClient.mongodb.update(discordClient.mongoClient,
-            reaction.message.guild.id,
-            reaction.message.channel.id,
-            reaction.message.author.id,
-            -1, -1, 0);
+    if (upvoteEmoji.includes(reaction.emoji.name)) {
+        change = [-1, -1, 0]
     }
-    else if (reaction.emoji.name === '👎') {
-        discordClient.mongodb.update(discordClient.mongoClient,
-            reaction.message.guild.id,
-            reaction.message.channel.id,
-            reaction.message.author.id,
-            1, 0, -1);
-    };
+    else if (downvoteEmoji.includes(reaction.emoji.name)) {
+        change = [1, 0, -1]
+    }
+    else return;
+
+    updateUserData(
+        reaction.message.guild.id,
+        reaction.message.channel.id,
+        {_id: reaction.message.author.id},
+        {$inc: {score: change[0], upvotes: change[1], downvotes: change[2]}}
+    );
 });
+
+function updateUserData(guildID, collection, filter, update) {
+    discordClient.mongodb.update(
+        discordClient.mongoClient,
+        guildID,
+        'Users',
+        filter,
+        update
+    );
+    discordClient.mongodb.update(
+        discordClient.mongoClient,
+        guildID,
+        collection,
+        filter,
+        update
+    );
+};
 
 discordClient.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
