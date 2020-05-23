@@ -1,23 +1,20 @@
-exports.update = async function(client, guildID, channelID, userID, scoreChange, upvotesChange, downvotesChange) {
+exports.update = async function(client, guildID, collection, filter, update) {
     const db = client.db(guildID);
-    
-    await db.collection('Users').findOneAndUpdate(
-        {_id: userID},
-        {$inc: {score: scoreChange, upvotes: upvotesChange, downvotes: downvotesChange}},
+
+    const data = await db.collection(collection).findOneAndUpdate(
+        filter,
+        update,
+        {returnOriginal: false},
         {upsert: true}
     );
 
-    await db.collection(channelID).findOneAndUpdate(
-        {_id: userID},
-        {$inc: {score: scoreChange, upvotes: upvotesChange, downvotes: downvotesChange}},
-        {upsert: true}
-    );
+    return data;
 };
 
 exports.read = async function(client, guildID, collection, filter) {
     const db = client.db(guildID);
 
-    var data = await db.collection(collection).find(
+    const data = await db.collection(collection).find(
         filter
     ).toArray();
 
