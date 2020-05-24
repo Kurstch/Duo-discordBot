@@ -4,8 +4,10 @@ exports.update = async function(client, guildID, collection, filter, update) {
     const data = await db.collection(collection).findOneAndUpdate(
         filter,
         update,
-        {returnOriginal: false},
-        {upsert: true}
+        {
+            upsert: true,
+            returnOriginal: false
+        }  
     );
 
     return data;
