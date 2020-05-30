@@ -1,31 +1,30 @@
-exports.updateUserData = function(discordClient, guildID, collection, filter, update, user) {
-    const {defaultRoles} = require('../config/config.json');
-
-    discordClient.mongodb.update(
-        discordClient.mongoClient,
+exports.updateUserData = function(app, guildID, collection, filter, update, user) {
+    app.mongodb.update(
+        app.mongoClient,
         guildID,
         'Users',
         filter,
         update
     )
     .then(data => {
-        checkForRoleUpdate(discordClient, guildID, data.value, user, defaultRoles);
+        checkForRoleUpdate(app, guildID, data.value, user);
     })
-    .catch(console.error);
-    discordClient.mongodb.update(
-        discordClient.mongoClient,
+    .catch(err => console.error(err));
+
+    app.mongodb.update(
+        app.mongoClient,
         guildID,
         collection,
         filter,
         update
     );
-};
+}
 
-function checkForRoleUpdate(discordClient, guildID, userData, user, defaultRoles) {
+function checkForRoleUpdate(app, guildID, userData, user) {
     // Try to find a document in the config collection
     // I will work out the filter once i decide how documents un the config collection will be sorted
-    discordClient.mongodb.read(
-        discordClient.mongoClient,
+    app.mongodb.read(
+        app.mongoClient,
         guildID,
         'Config',
         {}
@@ -42,34 +41,37 @@ function checkForRoleUpdate(discordClient, guildID, userData, user, defaultRoles
             // I will work out this section once I have implemented adding custom roles
         }
         else {
-            const roleObject = checkIfUserHasEnoughScore(userScore, defaultRoles);
+            const roleObject = checkIfUserHasEnoughScore(userScore, app.config.defaultRoles);
             if (roleObject === undefined) return;
-            checkIfUserHasRole(defaultRoles, roleObject, user);
+            checkIfUserHasRole(app.config.defaultRoles, roleObject, user);
             addUserToRole(roleObject, user);
-        };
+        }
     })
-    .catch(console.error);
+    .catch(err => {console.error(err)});
 
     function checkIfUserHasEnoughScore(userScore, roles) {
-        for (var role of roles) {
-            if (userScore > role.score) {return role;}
+        for (const role of roles) {
+            if (userScore > role.score) return role;
             else if (role == roles[roles.length - 1]) continue;
         }
-    };
+    }
 
     function checkIfUserHasRole(roles, roleObject, user) {
-        for (var role of user.roles.cache) {
+        for (const role of user.roles.cache) {
             if (role[1].name == '@everyone') continue;
+            // if (roles.includes(role[1].name) && role[1].name != roleObject.name) {
+            //     user.roles.remove(role);
+            // }
             for (var r of roles) {
                 if (r.name == role[1].name && role[1].name != roleObject.name) {
                     user.roles.remove(role);
-                };
-            };
-        };
-    };
+                }
+            }
+        }
+    }
 
     function addUserToRole(roleObject, user) {
-        var role = user.guild.roles.cache.find(r => r.name === roleObject.name);
+        const role = user.guild.roles.cache.find(role => role.name === roleObject.name);
         if (role == undefined) {
             user.guild.roles.create({
                 data: {
@@ -81,10 +83,10 @@ function checkForRoleUpdate(discordClient, guildID, userData, user, defaultRoles
             .then(role => {
                 user.roles.add(role);
             })
-            .catch(console.error);
+            .catch(err => {console.error(err)});
         }
         else {
             user.roles.add(role);
-        };
-    };
-};
+        }
+    }
+}

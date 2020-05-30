@@ -2,19 +2,15 @@ module.exports = {
     name: 'leaderboard',
     description: 'Reply with a leaderboard of users + user scores, upvotes, downvotes',
     aliases: ['lead'],
-    execute(message, args, discordClient) {
+    execute(message, args, app) {
         if (message.channel.type === 'dm') {
             return message.channel.send('You must ask for leaderboard in the server for witch you want to get the leaderboard');
-        };
+        }
 
-        const Discord = require('discord.js');
-        const mongoClient = discordClient.mongoClient;
-        const mongodb = message.guild.id;
         var mongoCollection;
-        var mongoFilter = {};
         var embedTitle;
 
-        // Set mongoCollection & hasMentions value
+        // Set mongoCollection and embedTitle values
         if (!message.mentions.channels.size) {
             mongoCollection = 'Users';
             embedTitle = 'Server leaderboard';
@@ -25,61 +21,65 @@ module.exports = {
             }
             mongoCollection = message.mentions.channels.first().id;
             embedTitle = `${message.mentions.channels.first().name} channel leaderboard`
-        };
+        }
 
-        discordClient.mongodb.read(
-            mongoClient,
-            mongodb,
+        app.mongodb.read(
+            app.mongoClient,
+            message.guild.id,
             mongoCollection,
-            mongoFilter
+            {}
         )
         .then(data => {
-            var leaderboardData = message.guild.members.cache.map(user => {
+            const leaderboardData = message.guild.members.cache
+            .filter(e => e.user.bot === false)
+            .map(user => {
                 if (!data.some(e => e._id == user.id)) {
                     return {
                         userMention: user,
                         score: 0,
                         upvotes: 0,
                         downvotes: 0
-                    };
-                };
-                let userData = data.find(e => e._id == user.id);
+                    }
+                }
+                const userData = data.find(e => e._id == user.id);
                 return {
                     userMention: user,
                     score: userData.score,
                     upvotes: userData.upvotes,
                     downvotes: userData.downvotes
-                };
+                }
             });
 
+            // Sort leaderboardData
             if (args.includes('upvotes')) {
-                leaderboardData.sort(function(a, b) {
+                leaderboardData.sort((a, b) => {
                     return a.upvotes - b.upvotes;
                 });
             }
             else if (args.includes('downvotes')) {
-                leaderboardData.sort(function(a, b) {
+                leaderboardData.sort((a, b) => {
                     return a.downvotes - b.downvotes;
                 });
             }
             else {
-                leaderboardData.sort(function(a, b) {
+                leaderboardData.sort((a, b) => {
                     return a.score - b.score;
                 });
-            };
+            }
             leaderboardData.reverse();
 
-            var usersFieldValue = leaderboardData.map(user => {
+            // Define field values
+            const usersFieldValue = leaderboardData.map(user => {
                 return user.userMention;
             });
-            var scoreFieldValue = leaderboardData.map(user => {
+            const scoreFieldValue = leaderboardData.map(user => {
                 return user.score;
             });
-            var upvotesDownvotesFieldValue = leaderboardData.map(user => {
-                return `${user.upvotes}/${user.downvotes}`
+            const upvotesDownvotesFieldValue = leaderboardData.map(user => {
+                return `${user.upvotes} / ${user.downvotes}`
             });
 
-            const embed = new Discord.MessageEmbed()
+            const embed = new app.discord.MessageEmbed()
             .setTitle(embedTitle)
             .addFields(
                 {name: 'Users', value: usersFieldValue, inline: true},
@@ -88,6 +88,6 @@ module.exports = {
             );
             return message.channel.send(embed);
         })
-        .catch(console.error);
-    },
-};
+        .catch(err => {console.error(err)});
+    }
+}

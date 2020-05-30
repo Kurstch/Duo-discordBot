@@ -1,66 +1,40 @@
-//#region initialize variables
+const App = require('./app');
+const app = new App();
 
-const Discord = require('discord.js');
-const {prefix, upvoteEmoji, downvoteEmoji, token, mongodburl} = require('./config/config.json');
-const discordClient = new Discord.Client();
+app.discordClient.login(app.config.token);
 
-const fs = require('fs');
-discordClient.commands = new Discord.Collection;
-
-//commands
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    discordClient.commands.set(command.name, command);
-};
-
-//mongodb
-const MongoClient = require('mongodb').MongoClient;
- MongoClient.connect(mongodburl, {useNewUrlParser: true, useUnifiedTopology:true}, (err, client) => {
-    if (err) throw err;
-    discordClient.mongoClient = client;
-});
-discordClient.mongodb = require('./db/mongodb');
-
-//reactions
-const upvote_downvote = require('./reactions/upvote_downvote');
-
-//#endregion
-
-discordClient.login(token);
-
-discordClient.once('ready', () => {
+app.discordClient.once('ready', () => {
     //get all messages
     try {
-        let channels = discordClient.channels.cache.filter(c => c.type == 'text').array();
+        let channels = app.discordClient.channels.cache.filter(c => c.type == 'text').array();
         for (let channel of channels) {
             channel.fetch()
             .then(c => {
                 c.messages.fetch();
-            }).catch(console.error);
-        };
+            }).catch(err => {console.error(err)});
+        }
     }
-    catch {
-        console.error;
-    };
-    console.log('client is ready'); 
+    catch (err) {
+        console.error(err);
+    }
+    console.log(`discordClient loged in as ${app.discordClient.user.username} ${app.discordClient.user}`); 
 });
 
-discordClient.on('messageReactionAdd', (reaction, user) => {
+app.discordClient.on('messageReactionAdd', (reaction, user) => {
     if (user.bot || user === reaction.message.author || reaction.message.author.bot) return;
 
     var change;
 
-    if (upvoteEmoji.includes(reaction.emoji.name)) {
+    if (app.config.upvoteEmoji.includes(reaction.emoji.name)) {
         change = [1, 1, 0]
     }
-    else if (downvoteEmoji.includes(reaction.emoji.name)) {
+    else if (app.config.downvoteEmoji.includes(reaction.emoji.name)) {
         change = [-1, 0, 1]
     }
     else return;
 
-    upvote_downvote.updateUserData(
-        discordClient,
+    app.vote_reaction.updateUserData(
+        app,
         reaction.message.guild.id,
         reaction.message.channel.id,
         {_id: reaction.message.author.id},
@@ -69,21 +43,21 @@ discordClient.on('messageReactionAdd', (reaction, user) => {
     );
 });
 
-discordClient.on('messageReactionRemove', (reaction, user) => {
+app.discordClient.on('messageReactionRemove', (reaction, user) => {
     if (user.bot || user === reaction.message.author || reaction.message.author.bot) return;
 
     var change;
 
-    if (upvoteEmoji.includes(reaction.emoji.name)) {
+    if (app.config.upvoteEmoji.includes(reaction.emoji.name)) {
         change = [-1, -1, 0]
     }
-    else if (downvoteEmoji.includes(reaction.emoji.name)) {
+    else if (app.config.downvoteEmoji.includes(reaction.emoji.name)) {
         change = [1, 0, -1]
     }
     else return;
 
-    upvote_downvote.updateUserData(
-        discordClient,
+    app.vote_reaction.updateUserData(
+        app,
         reaction.message.guild.id,
         reaction.message.channel.id,
         {_id: reaction.message.author.id},
@@ -92,31 +66,19 @@ discordClient.on('messageReactionRemove', (reaction, user) => {
     );
 });
 
-discordClient.on('message', message => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+app.discordClient.on('message', message => {
+    if (!message.content.startsWith(app.config.prefix) || message.author.bot) return;
 
-    const args = message.content.slice(prefix.length).split(/ +/);
+    const args = message.content.slice(app.config.prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
 
     // check if command exists, check for aliases
-    const command = discordClient.commands.get(commandName)
-		|| discordClient.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
+    const command = app.commands.get(commandName)
+	    || app.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
     if (!command) return;
 
-    // Check if arguments are necessary and are provided
-    if (command.args && !args.length) {
-        let reply = `You didn't provide any arguments, ${message.author}!`;
-
-        if (command.usage) {
-            reply += `\nYou must write \`${prefix}${commandName}\` + ${command.usage}`;
-        };
-
-        return message.channel.send(reply);
-    }
-
     try {
-        command.execute(message, args, discordClient);
+        command.execute(message, args, app);
     }
     catch (err) {
         console.log(message.content);
