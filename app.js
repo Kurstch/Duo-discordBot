@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const MongoClient = require('mongodb').MongoClient;
 const Config = require('./config/config.json');
+const WS = require('./ws/ws');
 const fs = require('fs');
 
 
@@ -29,6 +30,8 @@ class App {
         }
 
         this.vote_reaction = require('./reactions/upvote_downvote');
+
+        this.ws = new WS(this);
     }
 }
 
