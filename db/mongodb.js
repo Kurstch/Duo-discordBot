@@ -22,3 +22,13 @@ exports.read = async function(client, guildID, collection, filter) {
 
     return data;
 };
+
+exports.replace = async function(client, guildID, collection, filter, replacement) {
+    const db = client.db(guildID);
+
+    db.collection(collection).findOneAndReplace(
+        filter,
+        replacement,
+        { upsert: true },
+    );
+}

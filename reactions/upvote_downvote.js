@@ -22,14 +22,14 @@ exports.updateUserData = function(app, guildID, collection, filter, update, user
 
 function checkForRoleUpdate(app, guildID, userData, user) {
     // Try to find a document in the config collection
-    // I will work out the filter once i decide how documents un the config collection will be sorted
     app.mongodb.read(
         app.mongoClient,
         guildID,
         'Config',
-        {}
+        { _id: 'Roles' }
     )
     .then(data => {
+        var roles;
         const userScore = userData.score;
 
         // Check if guild has custom set roles, if not: use default from config
@@ -38,34 +38,36 @@ function checkForRoleUpdate(app, guildID, userData, user) {
         // If the user is already in one of the roles: remove the user from it
 
         if (data.length) {
-            // I will work out this section once I have implemented adding custom roles
+            roles = data[0];
+            delete roles["_id"];         
         }
         else {
-            const roleObject = checkIfUserHasEnoughScore(userScore, app.config.defaultRoles);
-            if (roleObject === undefined) return;
-            checkIfUserHasRole(app.config.defaultRoles, roleObject, user);
-            addUserToRole(roleObject, user);
+            roles = app.config.defaultRoles;
         }
+
+        const roleObject = checkIfUserHasEnoughScore(userScore, roles);
+        if (roleObject === undefined) return;
+        checkIfUserHasRole(roles, roleObject, user);
+        addUserToRole(roleObject, user);
     })
     .catch(err => {console.error(err)});
 
     function checkIfUserHasEnoughScore(userScore, roles) {
-        for (const role of roles) {
+        for (var i = 0; i < Object.keys(roles).length; i++) {
+            const role = roles['Rank' + i];
             if (userScore > role.score) return role;
-            else if (role == roles[roles.length - 1]) continue;
+            
         }
     }
 
     function checkIfUserHasRole(roles, roleObject, user) {
         for (const role of user.roles.cache) {
             if (role[1].name == '@everyone') continue;
-            // if (roles.includes(role[1].name) && role[1].name != roleObject.name) {
-            //     user.roles.remove(role);
-            // }
-            for (var r of roles) {
+            for (var i = 0; i < Object.keys(roles).length; i++) {
+                const r = roles['Rank' + i];
                 if (r.name == role[1].name && role[1].name != roleObject.name) {
                     user.roles.remove(role);
-                }
+                }              
             }
         }
     }

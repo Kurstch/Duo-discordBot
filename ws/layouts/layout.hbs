@@ -5,9 +5,18 @@
         <meta charset="UTF-8">
         <title>{{title}}</title>
         <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
     </head>
 
     <body>
-        {{{body}}}    
+        <div class="container">
+            <ul>
+                <li><a href="/nav?id=index">home</a></li>
+                <li><a href="/nav?id=roles">roles</a></li>
+            </ul>
+            <div class="contents-wrapper">
+                {{{body}}}    
+            </div>
+        </div>
     </body>
 </html>

@@ -1,0 +1,73 @@
+<div class="roles-header-wrapper">
+    <h2>Roles</h2>
+</div>
+<form action="/updateRoles" method="POST">
+    <div class="roles-wrapper" id="div2">
+        {{#each roles}}
+        <div class="role-items-wrapper">
+            <div class="role-remove-button">
+                <button onclick="removeRole(this);return false;">-</button>
+            </div>
+            <div class="role-text-inputs">
+                <input type="text" name="name" value="{{this.name}}">
+                <input type="text" name="score" value="{{this.score}}">
+                <input type="text" name="color" value="{{this.color}}">
+                <input type="text" name="reason" value="{{this.reason}}">
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <button onclick="addRole();return false;">+</button>
+    <input type="submit" value="save">
+</form>
+
+<script>
+    function addRole() {
+        const role = document.createElement('div');
+        role.className = "role-items-wrapper";
+
+        const buttonDiv = document.createElement('div');
+        buttonDiv.className = "role-remove-button";
+
+        const removeButton = document.createElement('button');
+        removeButton.onclick = "removeRole();return false;"
+
+        buttonDiv.appendChild(removeButton);
+        role.appendChild(buttonDiv);
+
+        const inputTextDiv = document.createElement('div');
+        inputTextDiv.className = "role-text-inputs";
+
+        const nameText = document.createElement('input');
+        nameText.type = "text";
+        nameText.name = "name";
+        nameText.placeholder = "role name";
+        inputTextDiv.appendChild(nameText);
+
+        const scoreText = document.createElement('input');
+        scoreText.type = "text";
+        scoreText.name = "score";
+        scoreText.placeholder = "required score";
+        inputTextDiv.appendChild(scoreText);
+
+        const valueText = document.createElement('input');
+        valueText.type = "text";
+        valueText.name = "color";
+        valueText.placeholder = "role color";
+        inputTextDiv.appendChild(valueText);
+
+        const reasonText = document.createElement('input');
+        reasonText.type = "text";
+        reasonText.name = "reason";
+        reasonText.placeholder = "role reason";
+        inputTextDiv.appendChild(reasonText);
+
+        role.appendChild(inputTextDiv);
+        document.getElementById('div2').appendChild(role);
+    }
+
+    function removeRole(sender) {
+        const elem = sender.parentNode.parentNode;
+        elem.parentNode.removeChild(elem);       
+    }
+</script>
