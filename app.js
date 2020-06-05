@@ -30,6 +30,7 @@ class App {
         }
 
         this.vote_reaction = require('./reactions/upvote_downvote');
+        this.updateUserRoles = require('./updateUserRoles').updateUserRoles;
 
         this.ws = new WS(this);
     }

@@ -8,15 +8,26 @@
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
     </head>
 
-    <body>
+    <body onload="loadGuildSelector()">
         <div class="container">
-            <ul>
-                <li><a href="/nav?id=index">home</a></li>
-                <li><a href="/nav?id=roles">roles</a></li>
-            </ul>
+            <div class="nav-wrapper">
+
+                <nav>
+                    <li><a href="/nav?id=home">home</a></li>
+                    <li><a onclick="loadPage('roles')">roles</a></li>
+                </nav>
+
+                <div class="nav-bottom-wrapper">
+                    Your servers:
+                    <select onchange="guildSelectionChange();return false;" id="guilds"></select>
+                </div>
+
+            </div>
             <div class="contents-wrapper">
-                {{{body}}}    
+                {{{body}}}
             </div>
         </div>
     </body>
+
+    <script src="layout.js"></script>
 </html>

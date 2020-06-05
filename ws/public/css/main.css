@@ -3,7 +3,8 @@ body {
     margin: 0;
 }
 
-ul {
+.nav-wrapper {
+    position: relative;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -25,6 +26,12 @@ li a {
 li a:hover {
     background-color: rgb(80, 80, 90);
     color: rgb(200, 200, 200);
+}
+
+.nav-bottom-wrapper {
+    position: absolute;
+    bottom: 3%;
+    left: 20px;
 }
 
 .contents-wrapper {

@@ -45,50 +45,7 @@ function checkForRoleUpdate(app, guildID, userData, user) {
             roles = app.config.defaultRoles;
         }
 
-        const roleObject = checkIfUserHasEnoughScore(userScore, roles);
-        if (roleObject === undefined) return;
-        checkIfUserHasRole(roles, roleObject, user);
-        addUserToRole(roleObject, user);
+        app.updateUserRoles(roles, user, userScore);
     })
     .catch(err => {console.error(err)});
-
-    function checkIfUserHasEnoughScore(userScore, roles) {
-        for (var i = 0; i < Object.keys(roles).length; i++) {
-            const role = roles['Rank' + i];
-            if (userScore > role.score) return role;
-            
-        }
-    }
-
-    function checkIfUserHasRole(roles, roleObject, user) {
-        for (const role of user.roles.cache) {
-            if (role[1].name == '@everyone') continue;
-            for (var i = 0; i < Object.keys(roles).length; i++) {
-                const r = roles['Rank' + i];
-                if (r.name == role[1].name && role[1].name != roleObject.name) {
-                    user.roles.remove(role);
-                }              
-            }
-        }
-    }
-
-    function addUserToRole(roleObject, user) {
-        const role = user.guild.roles.cache.find(role => role.name === roleObject.name);
-        if (role == undefined) {
-            user.guild.roles.create({
-                data: {
-                    name: roleObject.name,
-                    color: roleObject.color,
-                },
-                reason: roleObject.reason,
-            })
-            .then(role => {
-                user.roles.add(role);
-            })
-            .catch(err => {console.error(err)});
-        }
-        else {
-            user.roles.add(role);
-        }
-    }
 }

@@ -1,0 +1,5 @@
+<script>
+    urlPrarams = new URLSearchParams(window.location.hash);
+    window.localStorage.token = urlPrarams.get("access_token");
+    window.location.href = 'nav?id=home'
+</script>
