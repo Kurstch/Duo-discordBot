@@ -21,6 +21,7 @@ Template:
     },
     "mongodburl": "MongoDB connection string",
     "ws": {
+        "oauth2Redirect": "discord redicect url",
         "port": "port number"
     }
 }
