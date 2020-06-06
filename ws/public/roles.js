@@ -3,7 +3,7 @@ const loadedRoles = [];
 for (i = 0; i < loadedNames.length; i++) {
     loadedRoles.push(loadedNames[i].value);
 }
-const removedRoles = [];
+var removedRoles = [];
 
 function addRole() {
     const role = document.createElement('div');
@@ -37,17 +37,11 @@ function addRole() {
     scoreText.placeholder = "required score";
     inputTextDiv.appendChild(scoreText);
 
-    const valueText = document.createElement('input');
-    valueText.type = "text";
-    valueText.name = "color";
-    valueText.placeholder = "role color";
-    inputTextDiv.appendChild(valueText);
-
-    const reasonText = document.createElement('input');
-    reasonText.type = "text";
-    reasonText.name = "reason";
-    reasonText.placeholder = "role reason";
-    inputTextDiv.appendChild(reasonText);
+    const colorText = document.createElement('input');
+    colorText.type = "text";
+    colorText.name = "color";
+    colorText.placeholder = "role color";
+    inputTextDiv.appendChild(colorText);
 
     role.appendChild(inputTextDiv);
     document.getElementById('roles-wrapper').appendChild(role);
@@ -74,7 +68,6 @@ function updateRoles() {
             name: names[i].value,
             score: scores[i].value,
             color: colors[i].value,
-            reason: reasons[i].value
         });
     }
     rolesArray.sort((a, b) => {
@@ -96,4 +89,5 @@ function updateRoles() {
         roles: roles,
         removedRoles: removedRoles
     }));
+    removedRoles.length = 0;
 }

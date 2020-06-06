@@ -13,7 +13,6 @@ Template:
             "name": "roleName (eg. Rank1)",
             "score": "required score to get role (can be negative)",
             "color": "role color",
-            "reason": "role reason"
         },
         "Rank1": {
             //...
