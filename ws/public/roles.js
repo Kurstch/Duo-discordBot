@@ -9,6 +9,10 @@ function addRole() {
     const role = document.createElement('div');
     role.className = "role-items-wrapper";
 
+    const colorDisplayDiv = document.createElement('div');
+    colorDisplayDiv.className = "color-display"
+    role.appendChild(colorDisplayDiv);
+
     const buttonDiv = document.createElement('div');
     buttonDiv.className = "role-remove-button";
 
@@ -40,6 +44,10 @@ function addRole() {
     const colorText = document.createElement('input');
     colorText.type = "text";
     colorText.name = "color";
+    colorText.oninput = function() {
+        changeColorDisplay(this);
+        return false;
+    }
     colorText.placeholder = "role color";
     inputTextDiv.appendChild(colorText);
 
@@ -56,6 +64,14 @@ function removeRole(sender) {
     elem.parentNode.removeChild(elem);       
 }
 
+function changeColorDisplay(sender) {
+    const colorDisplay = sender.parentNode.parentNode.children[0];
+    if (sender.value.match(/^\d/)) {
+        return colorDisplay.style = `background-color:rgb(${sender.value})`;
+    }
+    colorDisplay.style = `background-color:${sender.value}`;
+}
+
 function updateRoles() {
     var names = document.getElementsByName('name');
     var scores = document.getElementsByName('score');
@@ -63,10 +79,18 @@ function updateRoles() {
 
     var rolesArray = [];
     for (i = 0; i < names.length; i++) {
+        var color;
+        if (colors[i].value.match(/^\d/)) {
+            color = colors[i].value.split(', ');
+            color[0] = Number(color[0]);
+            color[1] = Number(color[1]);
+            color[2] = Number(color[2]);
+        }
+        else color = colors[i].value
         rolesArray.push({
             name: names[i].value,
             score: scores[i].value,
-            color: colors[i].value,
+            color: color
         });
     }
     rolesArray.sort((a, b) => {

@@ -10,7 +10,7 @@
     margin: 1em;
     display: flex;
     background-color: rgb(50, 50, 53);
-    width: 400px;
+    width: 360px;
 }
 
 .role-items-wrapper:hover button {
@@ -55,6 +55,13 @@ input {
     border-color: red;
     background-color: transparent;
     color: red;
+}
+
+.color-display {
+    border-radius: 10px 0 0 10px;
+    height: 176px;
+    width: 10px;
+    background-color: gray;
 }
 
 /* lower buttons */

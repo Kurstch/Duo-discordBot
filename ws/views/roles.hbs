@@ -8,13 +8,14 @@
     <div class="roles-wrapper" id="roles-wrapper">
         {{#each roles}}
         <div class="role-items-wrapper">
+            <div class="color-display" style="background-color: {{this.displayColor}};"></div>
             <div class="role-remove-button">
                 <button class="fa fa-trash" onclick="removeRole(this);return false;"></button>
             </div>
             <div class="role-text-inputs">
                 <input type="text" name="name" value="{{this.name}}">
                 <input type="text" name="score" value="{{this.score}}">
-                <input type="text" name="color" value="{{this.color}}">
+                <input type="text" name="color" value="{{this.color}}" oninput="changeColorDisplay(this);return false;">
             </div>
         </div>
         {{/each}}

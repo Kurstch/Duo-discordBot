@@ -27,11 +27,16 @@ module.exports.updateUserRoles = async(roles, user, userScore) => {
 
     // grant user the role
     var role = await user.guild.roles.cache.find(role => role.name === roleObject.name);
+
+    var color;
+    if (Array.isArray(roleObject.color)) color = roleObject.color;
+    else color = roleObject.color.toUpperCase();
+
     if (role == undefined) {
         role = user.guild.roles.create({
             data: {
                 name: roleObject.name,
-                color: roleObject.color.toUpperCase(),
+                color: color
             }
         })
         .then(r => {
@@ -41,7 +46,7 @@ module.exports.updateUserRoles = async(roles, user, userScore) => {
     }
     else {
         role.edit({
-            color: roleObject.color.toUpperCase()
+            color: color
         });
         user.roles.add(role);
     }

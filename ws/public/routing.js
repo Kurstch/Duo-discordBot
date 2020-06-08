@@ -21,11 +21,21 @@ module.exports.routing = (app, ws) => {
             if (data.length) {
                 roles = data[0];
                 delete roles["_id"];
+
+                for (i = 0; i < Object.keys(roles).length; i++) {
+                    const role = roles['Rank' + i];
+                    if (Array.isArray(role.color)) {
+                        role.color[1] = ' ' + role.color[1];
+                        role.color[2] = ' ' + role.color[2];
+                        role.displayColor = `rgb(${role.color})`;
+                    }
+                    else role.displayColor = role.color; 
+                }
             }
             else {
                 roles = app.config.defaultRoles;
             }
-            res.render('roles', { title: `DUO ${req.query.id}`, roles: roles})
+            res.render('roles', { title: `DUO ${req.path.split('/')[1]}`, roles: roles})
         })
         .catch(err => { console.log(err); })
     });
