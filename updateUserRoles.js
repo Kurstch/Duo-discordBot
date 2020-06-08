@@ -31,7 +31,7 @@ module.exports.updateUserRoles = async(roles, user, userScore) => {
         role = user.guild.roles.create({
             data: {
                 name: roleObject.name,
-                color: roleObject.color,
+                color: roleObject.color.toUpperCase(),
             }
         })
         .then(r => {
