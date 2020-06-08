@@ -66,6 +66,7 @@ function initializeUser() {
             logoutButton.className = 'logout-button';
             logoutButton.onclick = function() {
                 window.localStorage.removeItem('token');
+                window.localStorage.removeItem('gid');
                 window.location.reload();
             }
             logoutButton.innerText = 'logout';
