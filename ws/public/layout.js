@@ -3,7 +3,7 @@ function initializeSidebar() {
     initializeUser();
 }
 
-async function initializeGuildSelect() {
+function initializeGuildSelect() {
     //get all guilds the user is a member in
     //if user is the guilds owner - add the guild to navigation bar guilds selector
     
@@ -68,9 +68,9 @@ function guildSelectionChange() {
     //reload page with selected guild's data
 
     window.localStorage.gid = document.getElementById('guilds').value;
-    loadPage('roles');
+    loadPage(location.pathname);
 }
 
-function loadPage(id) {
-    window.location.href = `/nav?id=${id}&gid=${window.localStorage.gid}`;
+function loadPage(path) {
+    window.location.href = `${path}?gid=${window.localStorage.gid}`;
 }

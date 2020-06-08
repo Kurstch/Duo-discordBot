@@ -28,49 +28,7 @@ class WebSocket {
     }
 
     registerRoots(app) {
-        this.express.get('/', (req, res) => {
-            res.render('callback', { title: "DUO bot" })
-        });
-
-        this.express.get('/nav', (req, res) => {
-            if (req.query.id == 'home') {
-                res.render('home', {title: 'DUO Home'});
-            }
-            else if (req.query.id == 'roles') {
-                if (!checkIfBotHasGuild()) return 
-                app.mongodb.read(
-                    app.mongoClient,
-                    req.query.gid,
-                    'Config',
-                    { _id: 'Roles' }
-                )
-                .then(data => {
-                    var roles;
-                    if (data.length) {
-                        roles = data[0];
-                        delete roles["_id"];
-                    }
-                    else {
-                        roles = app.config.defaultRoles;
-                    }
-                    res.render('roles', { title: `DUO ${req.query.id}`, roles: roles})
-                })
-                .catch(err => { console.log(err); })
-            }
-
-            function checkIfBotHasGuild() {
-                if (req.query.token == "undefined") {
-                    res.render('error', {error: 'You haven\'t logged in'});
-                    return false;
-                }
-                var guild = app.discordClient.guilds.cache.find(g => g.id == req.query.gid);
-                if (guild == undefined) {
-                    res.render('duoConnectionError');
-                    return false;
-                }
-                return true;
-            }
-        });
+        require('./public/routing').routing(app, this);
 
         this.express.post('/updateRoles', (req, res) => {
             //check if token is provided
