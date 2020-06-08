@@ -82,7 +82,7 @@ function guildSelectionChange() {
     //reload page with selected guild's data
 
     window.localStorage.gid = document.getElementById('guilds').value;
-    loadPage(location.pathname);
+    loadPage('/' + location.pathname.split('/')[1]);
 }
 
 function loadPage(path) {
