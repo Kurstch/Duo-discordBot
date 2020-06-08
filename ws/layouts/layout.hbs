@@ -4,25 +4,29 @@
     <head>
         <meta charset="UTF-8">
         <title>{{title}}</title>
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/layout.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap">
     </head>
 
-    <body onload="loadGuildSelector()">
+    <body onload="initializeSidebar()">
         <div class="container">
-            <div class="nav-wrapper">
+            <aside>
+                <div class="sidebar-title">
+                    <img class="duo-icon" src="images/DUO.png" alt="Duo icon">
+                    Duo
+                </div>
 
                 <nav>
                     <li><a href="/nav?id=home">home</a></li>
                     <li><a onclick="loadPage('roles')">roles</a></li>
                 </nav>
 
-                <div class="nav-bottom-wrapper">
-                    Your servers:
+                <div class="sidebar-bottom-wrapper">
                     <select onchange="guildSelectionChange();return false;" id="guilds"></select>
+                    <div class="user" id="user">
+                    </div>
                 </div>
-
-            </div>
+            </aside>
             <div class="contents-wrapper">
                 {{{body}}}
             </div>
