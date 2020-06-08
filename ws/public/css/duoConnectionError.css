@@ -1,0 +1,39 @@
+.message {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.message-head {
+    display: flex;
+}
+
+.message-head img {
+    width: 130px;
+    height: 130px;
+    border-radius: 30%;
+}
+
+.message-head h1 {
+    margin-left: 60px;
+    align-self: center;
+    color: white;
+}
+
+.message-details {
+    margin-left: 190px;
+}
+
+.message-details h3 {
+    color: darkgray;
+}
+
+.message-details a {
+    color: darkgoldenrod;
+    text-decoration: none;
+} 
+
+.message-details a:hover {
+    color: orange;
+}

@@ -59,13 +59,13 @@ class WebSocket {
             }
 
             function checkIfBotHasGuild() {
-                if (req.query.gid == "undefined") {
+                if (req.query.token == "undefined") {
                     res.render('error', {error: 'You haven\'t logged in'});
                     return false;
                 }
                 var guild = app.discordClient.guilds.cache.find(g => g.id == req.query.gid);
                 if (guild == undefined) {
-                    res.render('error', {error: 'bot isn\'t connected to this server'});
+                    res.render('duoConnectionError');
                     return false;
                 }
                 return true;
