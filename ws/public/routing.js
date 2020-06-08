@@ -3,9 +3,13 @@ module.exports.routing = (app, ws) => {
         res.render('callback', { title: "DUO bot" })
     });
 
+    ws.express.get('/home', (req, res) => {
+        res.render('home', {title: 'Duo Home'});
+    });
+
     ws.express.get('/roles/:gid?', (req, res) => {
         if (isNaN(req.params.gid)) return;
-        if (!checkIfBotHasGuild()) return;
+        if (app.discordClient.guilds.cache.find(g => g.id == req.params.gid) === undefined) return res.render('duoConnectionError', {title: 'Duo not connected'});
         app.mongodb.read(
             app.mongoClient,
             req.params.gid,
@@ -24,22 +28,9 @@ module.exports.routing = (app, ws) => {
             res.render('roles', { title: `DUO ${req.query.id}`, roles: roles})
         })
         .catch(err => { console.log(err); })
-    
-        function checkIfBotHasGuild() {
-            if (req.query.token === 'undefined') {
-                res.render('error', {error: 'You haven\'t logged in'});
-                return false;
-            }
-            var guild = app.discordClient.guilds.cache.find(g => g.id == req.params.gid);
-            if (guild == undefined) {
-                res.render('duoConnectionError');
-                return false;
-            }
-            return true;
-        }
     });
-    
-    ws.express.get('/home', (req, res) => {
-        res.render('home', {title: 'Duo Home'});
+
+    ws.express.get('/unauth', (req, res) => {
+        res.render('error', {title: 'unauth'});
     });
 }

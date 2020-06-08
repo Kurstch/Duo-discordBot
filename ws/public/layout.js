@@ -87,5 +87,6 @@ function guildSelectionChange() {
 
 function loadPage(path) {
     if (path == '/home') return window.location.href = path;
+    if (window.localStorage.token === undefined) return location.href = '/unauth';
     window.location.href = `${path}/${window.localStorage.gid}`;
 }
