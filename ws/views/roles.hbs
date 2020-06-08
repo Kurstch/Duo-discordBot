@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="css/roles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="roles-header-wrapper">
     <h2>Roles</h2>
 </div>
@@ -6,7 +9,7 @@
         {{#each roles}}
         <div class="role-items-wrapper">
             <div class="role-remove-button">
-                <button onclick="removeRole(this);return false;">-</button>
+                <button class="fa fa-trash" onclick="removeRole(this);return false;"></button>
             </div>
             <div class="role-text-inputs">
                 <input type="text" name="name" value="{{this.name}}">
@@ -16,8 +19,8 @@
         </div>
         {{/each}}
     </div>
-    <button onclick="addRole();return false;">+</button>
-    <button onclick="updateRoles();return false;">Save</button>
+    <button class="add-button" onclick="addRole();return false;">+</button>
+    <button class="save-button" onclick="updateRoles();return false;">Save</button>
 </form>
 
 <script src="roles.js"></script>

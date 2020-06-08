@@ -13,7 +13,7 @@ function addRole() {
     buttonDiv.className = "role-remove-button";
 
     const removeButton = document.createElement('button');
-    removeButton.innerHTML = "-";
+    removeButton.className = "fa fa-trash"
     removeButton.onclick = function() {
         removeRole(this);
         return false;
@@ -60,7 +60,6 @@ function updateRoles() {
     var names = document.getElementsByName('name');
     var scores = document.getElementsByName('score');
     var colors = document.getElementsByName('color');
-    var reasons = document.getElementsByName('reason');
 
     var rolesArray = [];
     for (i = 0; i < names.length; i++) {
@@ -81,7 +80,7 @@ function updateRoles() {
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://192.168.43.243:41206/updateRoles");
+    xhr.open("POST", `http://${location.hostname}:${location.port}/updateRoles`);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({
         token: window.localStorage.token,
