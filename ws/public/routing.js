@@ -3,11 +3,12 @@ module.exports.routing = (app, ws) => {
         res.render('callback', { title: "DUO bot" })
     });
 
-    ws.express.get('/roles', (req, res) => {
+    ws.express.get('/roles/:gid?', (req, res) => {
+        if (isNaN(req.params.gid)) return;
         if (!checkIfBotHasGuild()) return;
         app.mongodb.read(
             app.mongoClient,
-            req.query.gid,
+            req.params.gid,
             'Config',
             { _id: 'Roles' }
         )
@@ -25,11 +26,11 @@ module.exports.routing = (app, ws) => {
         .catch(err => { console.log(err); })
     
         function checkIfBotHasGuild() {
-            if (req.query.token == "undefined") {
+            if (req.query.token === 'undefined') {
                 res.render('error', {error: 'You haven\'t logged in'});
                 return false;
             }
-            var guild = app.discordClient.guilds.cache.find(g => g.id == req.query.gid);
+            var guild = app.discordClient.guilds.cache.find(g => g.id == req.params.gid);
             if (guild == undefined) {
                 res.render('duoConnectionError');
                 return false;

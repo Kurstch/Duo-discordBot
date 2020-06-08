@@ -51,7 +51,7 @@ function initializeUser() {
                 userAvatar.src = `https://cdn.discordapp.com/avatars/${response.id}/${response.avatar}.png`;
             }
             else {
-                userAvatar.src = "images/discordDefaultAvatar.png"
+                userAvatar.src = "/images/discordDefaultAvatar.png"
             }
             userDiv.appendChild(userAvatar);
 
@@ -86,5 +86,6 @@ function guildSelectionChange() {
 }
 
 function loadPage(path) {
-    window.location.href = `${path}?gid=${window.localStorage.gid}`;
+    if (path == '/home') return window.location.href = path;
+    window.location.href = `${path}/${window.localStorage.gid}`;
 }
