@@ -53,11 +53,25 @@ function initializeUser() {
             else {
                 userAvatar.src = "images/discordDefaultAvatar.png"
             }
-            userDiv.appendChild(userAvatar); 
+            userDiv.appendChild(userAvatar);
+
+            const userTextDiv = document.createElement('div');
+            userTextDiv.className = 'user-text';
 
             const username = document.createElement("small");
             username.innerHTML = response.username;
-            userDiv.appendChild(username);
+            userTextDiv.appendChild(username);
+
+            const logoutButton = document.createElement('button');
+            logoutButton.className = 'logout-button';
+            logoutButton.onclick = function() {
+                window.localStorage.removeItem('token');
+                window.location.reload();
+            }
+            logoutButton.innerText = 'logout';
+            userTextDiv.appendChild(logoutButton);
+
+            userDiv.appendChild(userTextDiv);
         }
     }
     xhr.send();

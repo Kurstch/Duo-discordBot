@@ -16,6 +16,7 @@ aside {
     overflow: auto;
 }
 
+/* sidebar title */
 .sidebar-title {
     display: flex;
     align-items: center;
@@ -30,6 +31,7 @@ aside {
     margin: 20px;
 }
 
+/* sidebar nav */
 nav {
     border-top: 1px solid white;
 }
@@ -41,12 +43,14 @@ li a {
     padding: 12px 16px;
     font-size: 18px;
     text-decoration: none;
+    cursor: pointer;
 }
 
 li a:hover {
     background-color: rgb(50, 50, 53);
 }
 
+/* sidebar bottom */
 .sidebar-bottom-wrapper {
     position: absolute;
     bottom: 40px;
@@ -54,6 +58,7 @@ li a:hover {
     color: rgb(200, 200, 200);
 }
 
+/* guild select */
 .sidebar-bottom-wrapper select {
     border: none;
     border-radius: 10px;
@@ -66,6 +71,7 @@ li a:hover {
     cursor: pointer;
 }
 
+/* user display */
 .user {
     display: flex;
     align-items: center;
@@ -89,7 +95,22 @@ li a:hover {
 .user a {
     margin-left: 35%;
     text-decoration: none;
-    color: rgb(200, 200, 200);
+    color: green;
+}
+
+.user a:hover {
+    color: greenyellow;
+}
+
+.user-text {
+    display: grid;
+}
+
+.user-text button {
+    border: none;
+    background-color: transparent;
+    color: darkred;
+    cursor: pointer;
 }
 
 /* main content */
