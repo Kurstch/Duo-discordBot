@@ -1,14 +1,24 @@
 module.exports.updateUserRoles = async(roles, user, userScore) => {
     var roleObject = null;
 
-    // check if user has enough score
+    // Check if user has enough score
+    // Must check seperatly for roles with positive and negative scores
+
     for (var i = 0; i < Object.keys(roles).length; i++) {
         const role = roles['Rank' + i];
-        if (userScore >= role.score) {
-            roleObject = role;
-            break;
+        if (role.score < 0) {
+            if (userScore <= role.score) {
+                roleObject = role;
+                break
+            }
         }
-        else if (role == roles['Rank' + Object.keys(roles).length -1]) break;
+        else {      
+            if (userScore >= role.score) {
+                roleObject = role;
+                break;
+            }
+        }
+        if (role == roles['Rank' + Object.keys(roles).length -1]) break;
     }
 
     // check if user has any of the autoroles
@@ -16,11 +26,14 @@ module.exports.updateUserRoles = async(roles, user, userScore) => {
         if (role[1].name == '@everyone') continue;
         for (var i = 0; i < Object.keys(roles).length; i++) {
             const r = roles['Rank' + i];
-            try {
-                if (r.name == role[1].name && role[1].name != roleObject.name) {
-                    await user.roles.remove(role);
+            if (role[1].name === r.name) {
+                try {
+                    if (role[1].name !== roleObject.name) {
+                        await user.roles.remove(role);
+                    }
                 }
-            } catch {}
+                catch {await user.roles.remove(role);} // If there is an error (roleObject is null), that means user doesn't have enough score for any role 
+            }
         }
     }
     if (roleObject === null) return;

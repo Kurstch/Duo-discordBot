@@ -91,7 +91,7 @@ function updateRoles() {
         else color = colors[i].value
         rolesArray.push({
             name: names[i].value,
-            score: scores[i].value,
+            score: Number(scores[i].value),
             color: color
         });
     }
