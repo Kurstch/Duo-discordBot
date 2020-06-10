@@ -18,7 +18,6 @@ module.exports.updateUserRoles = async(roles, user, userScore) => {
                 break;
             }
         }
-        if (role == roles['Rank' + Object.keys(roles).length -1]) break;
     }
 
     // check if user has any of the autoroles
