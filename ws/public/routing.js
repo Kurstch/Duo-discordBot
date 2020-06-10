@@ -34,6 +34,10 @@ module.exports.routing = (app, ws) => {
             }
             else {
                 roles = app.config.defaultRoles;
+                for (i = 0; i < Object.keys(roles).length; i++) {
+                    const role = roles['Rank' + i];
+                    role.displayColor = role.color;
+                }
             }
             res.render('roles', { title: `DUO ${req.path.split('/')[1]}`, roles: roles})
         })
