@@ -1,27 +1,125 @@
 <link rel="stylesheet" type="text/css" href="/css/roles.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div class="roles-header-wrapper">
-    <h2>Roles</h2>
-</div>
-<form>
-    <div class="roles-wrapper" id="roles-wrapper">
-        {{#each roles}}
-        <div class="role-items-wrapper">
-            <div class="color-display" style="background-color: {{this.displayColor}};"></div>
-            <div class="role-remove-button">
-                <button class="fa fa-trash" onclick="removeRole(this);return false;"></button>
-            </div>
-            <div class="role-text-inputs">
-                <input type="text" name="name" value="{{this.name}}">
-                <input type="text" name="score" value="{{this.score}}">
-                <input type="text" name="color" value="{{this.color}}" oninput="changeColorDisplay(this);return false;">
-            </div>
+<div class="panels">
+
+    <div class="roles-panel">
+
+        <div class="roles-header-wrapper">
+            <h2>Roles</h2>
         </div>
-        {{/each}}
+
+        <form>
+            <div class="roles-wrapper" id="roles-wrapper">
+                {{#each roles}}
+                    <div class="role-items-wrapper">
+
+                        <div class="color-display" style="background-color: {{this.displayColor}};"></div>
+
+                        <div class="role-remove-button">
+                            <button class="fa fa-trash" onclick="removeRole(this);return false;"></button>
+                        </div>
+
+                        <div class="role-text-inputs">
+                            <div class="input-field">
+                                Name:
+                                <input type="text" name="name" value="{{this.name}}">  
+                            </div>
+                            <div class="input-field">
+                                Score:
+                                <input type="text" name="score" value="{{this.score}}">
+                            </div>
+                            <div class="input-field">
+                                Color:
+                                <input type="text" name="color" value="{{this.color}}" oninput="changeColorDisplay(this);return false;">
+                            </div>       
+                        </div>
+
+                    </div>
+                {{/each}}
+            </div>
+
+            <button class="add-button" onclick="addRole();return false;">+</button>
+            <button class="save-button" onclick="updateRoles();return false;">Save</button>
+        </form>
+
     </div>
-    <button class="add-button" onclick="addRole();return false;">+</button>
-    <button class="save-button" onclick="updateRoles();return false;">Save</button>
-</form>
+
+    <div class="info-panel">
+
+        <div class="info-section">
+            <h3>Score</h3>
+            <dl>
+                <dt>What is it?</dt>
+                <dd>The required ammount of points a user needs to get the role</dd>
+                <dt>How are points gained?</dt>
+                <dd>User's score depends on how many upvotes/downvotes they recieve</dd>
+                <dt>What score should I give?</dt>
+                <dd>Any number is fine</dd>
+                <dd>though You should concider how many members your server has</dd>
+                <dd>
+                    i.e. a server of <bdi>30</bdi> people would have roles assiged for <bdi>10</bdi>, <bdi>20</bdi>, <bdi>40</bdi> etc. points,
+                    but a server of <bdi>1000</bdi>: <bdi>100</bdi>, <bdi>200</bdi>, <bdi>400</bdi> etc. points
+                </dd>
+                <dd>score <bdi>can</bdi> also be negative: assiged for getting too many downvotes</dd>
+            </dl>
+        </div>
+
+        <div class="info-section">
+            <h3>Color</h3>
+            <dl>
+                <dt>What is it?</dt>
+                <dd>The color the the role</dd>
+                <dt>What color can I give?</dt>
+                <dl>
+                    <dt>color name</dt>
+                    <dd>Due to Discord's limitations only a few color names are accepted</dd>
+                    <dd>
+                        <details>
+                            <summary><bdi>Accepted color names</bdi></summary>
+                            <li>default</li>
+                            <li>white</li>
+                            <li>aqua</li>
+                            <li>dark_aqua</li>
+                            <li>green</li>
+                            <li>dark_green</li>
+                            <li>blue</li>
+                            <li>dark_blue</li>
+                            <li>yellow</li>
+                            <li>purple</li>
+                            <li>dark_purple</li>
+                            <li>luminous_vivid_pink</li>
+                            <li>dark_vivid_pink</li>
+                            <li>gold</li>
+                            <li>dark_gold</li>
+                            <li>orange</li>
+                            <li>dark_orange</li>
+                            <li>red</li>
+                            <li>dark_red</li>
+                            <li>grey</li>
+                            <li>light_grey</li>
+                            <li>darker_grey</li>
+                            <li>dark_grey</li>
+                            <li>navy</li>
+                            <li>dark_navy</li>
+                            <li>random</li>
+                        </details>
+                    </dd>
+                    <dt>color hex</dt>
+                    <dd>e.g. #ffa500</dd>
+                    <dt>rgb value</dt>
+                    <dd class="rgb">e.g. 255, 165, 0</dd>
+                    <dd class="rgb">
+                        <bdi>!</bdi> The rgb value <bdi>MUST</bdi> be formatted as shown above<br>
+                        i.e. "number, number, number"
+                    </dd>
+                </dl>
+            </dl>
+        </div>
+
+    </div>
+
+</div>
+
 
 <script src="/roles.js"></script>

@@ -1,16 +1,22 @@
-/* header */
+.panels {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 30px;
+}
+
+/* roles panel */
 .roles-header-wrapper {
+    padding-left: 20px;
     color: white;
 }
 
-/* roles display */
 .role-items-wrapper {
     border-radius: 10px;
     box-shadow: inset 4px 3px 3px rgb(45, 45, 48);
     margin: 1em;
     display: flex;
     background-color: rgb(50, 50, 53);
-    width: 360px;
+    width: 420px;
 }
 
 .role-items-wrapper:hover button {
@@ -24,13 +30,23 @@
     display: grid;
 }
 
-input {
+.input-field {
+    display: flex;
+    align-items: center;
     border: none;
     border-radius: 10px;
-    color: white;
+    color: gray;
     background-color: rgb(36, 36, 36);
     margin: 5px;
-    padding: 10px 30px;
+    padding: 6px 30px;
+    font-size: 14px;
+}
+
+input {
+    border: none;
+    background-color: transparent;
+    color: white;
+    padding-left: 20px;
     font-size: 16px;
 }
 
@@ -64,7 +80,6 @@ input {
     background-color: gray;
 }
 
-/* lower buttons */
 .add-button {
     border: 2px solid green;
     border-radius: 7px;
@@ -90,11 +105,60 @@ input {
     background-color: darkorange;
     width: 80px;
     height: 30px;
-    margin-left: 250px;
+    margin-left: 240px;
     font-size: 22px;
     cursor: pointer;
 }
 
 .save-button:hover {
-    color: white;
+    background-color: orange;
+}
+
+/* info panel */
+.info-panel {
+    padding-top: 75.84px;
+    padding-right: 300px;
+    width: 420px;
+}
+
+.info-section {
+    border-radius: 10px;
+    box-shadow: inset 4px 3px 3px rgb(45, 45, 48);
+    background-color: rgb(50, 50, 53);
+    margin-bottom: 1em;
+}
+
+.info-section h3 {
+    color: orange;
+    padding-top: 16px;
+    margin: 16px;
+    margin-top: 0;
+}
+
+.info-section dl {
+    color: lightgray;
+    padding-bottom: 16px;
+    padding-left: 16px;
+    margin: 16px;
+}
+
+.info-section dl dl dt {
+    color: darksalmon;
+}
+
+.info-section dt {
+    margin-top: 16px;
+    color: lightseagreen;
+}
+
+.info-section dd {
+    margin-bottom: 6px;
+}
+
+.info-section bdi {
+    color: indianred;
+}
+
+.rgb {
+    word-spacing: 5px;
 }

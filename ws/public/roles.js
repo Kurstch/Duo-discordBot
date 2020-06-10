@@ -29,27 +29,29 @@ function addRole() {
     const inputTextDiv = document.createElement('div');
     inputTextDiv.className = "role-text-inputs";
 
-    const nameText = document.createElement('input');
-    nameText.type = "text";
-    nameText.name = "name";
-    nameText.placeholder = "role name";
-    inputTextDiv.appendChild(nameText);
+        createInput('Name', "role name");
+        createInput('Score', "required score");
+        createInput('Color', "role color");
 
-    const scoreText = document.createElement('input');
-    scoreText.type = "text";
-    scoreText.name = "score";
-    scoreText.placeholder = "required score";
-    inputTextDiv.appendChild(scoreText);
+        function createInput(inputName, placeholder) {
+            const inputField = document.createElement('div');
+            inputField.className = 'input-field';
+            inputField.innerHTML = `${inputName}:`
 
-    const colorText = document.createElement('input');
-    colorText.type = "text";
-    colorText.name = "color";
-    colorText.oninput = function() {
-        changeColorDisplay(this);
-        return false;
-    }
-    colorText.placeholder = "role color";
-    inputTextDiv.appendChild(colorText);
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = inputName.toLowerCase();
+            input.placeholder = placeholder;
+            if (inputName == 'Color') {
+                input.oninput = function() {
+                    changeColorDisplay(this);
+                    return false
+                }
+            }
+
+            inputField.appendChild(input);
+            inputTextDiv.appendChild(inputField);
+        }
 
     role.appendChild(inputTextDiv);
     document.getElementById('roles-wrapper').appendChild(role);
@@ -65,7 +67,7 @@ function removeRole(sender) {
 }
 
 function changeColorDisplay(sender) {
-    const colorDisplay = sender.parentNode.parentNode.children[0];
+    const colorDisplay = sender.parentNode.parentNode.parentNode.children[0];
     if (sender.value.match(/^\d/)) {
         return colorDisplay.style = `background-color:rgb(${sender.value})`;
     }
