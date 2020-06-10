@@ -49,6 +49,6 @@ module.exports.routing = (app, ws) => {
     });
 
     ws.express.get('/unauth', (req, res) => {
-        res.render('error', {title: 'unauth', error: "unauth"});
+        res.render('unauth', {title: "unauth"});
     });
 }

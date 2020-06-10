@@ -32,7 +32,7 @@ class WebSocket {
 
         this.express.post('/updateRoles', (req, res) => {
             //check if token is provided
-            if (!req.body.token) return res.json({error: "unauth"});
+            if (!req.body.token) return res.render('message', {title: "unauth"});
             fetch("https://discordapp.com/api/users/@me/guilds", {
                 method: "GET",
                 headers: {
@@ -45,7 +45,7 @@ class WebSocket {
 
                 //check if user has admin permission
                 var guild = response.find(x => x.id == req.body.guildID);
-                if (!guild || !guild.owner) return res.json({error: "unauth"});
+                if (!guild || !guild.owner) return res.sendStatus(403);
 
                 //remove roles from guilds
                 guild = app.discordClient.guilds.cache.find(g => g.id == req.body.guildID);
