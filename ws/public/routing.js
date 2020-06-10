@@ -1,7 +1,11 @@
 module.exports.routing = (app, ws) => {
     ws.express.get('/', (req, res) => {
-        res.render('callback', { title: "DUO bot" })
+        res.render('home', {title: 'Duo Home'});
     });
+
+    ws.express.get('/index', (req, res) => {
+        res.render('index', {title: "index"})
+    })
 
     ws.express.get('/home', (req, res) => {
         res.render('home', {title: 'Duo Home'});
@@ -45,6 +49,6 @@ module.exports.routing = (app, ws) => {
     });
 
     ws.express.get('/unauth', (req, res) => {
-        res.render('error', {title: 'unauth'});
+        res.render('error', {title: 'unauth', error: "unauth"});
     });
 }

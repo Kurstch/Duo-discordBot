@@ -40,7 +40,7 @@ function initializeUser() {
         const userDiv = document.getElementById("user");
         if (!response.id) {
             const loginLink = document.createElement("a");
-            loginLink.href = "https://discord.com/api/oauth2/authorize?client_id=710067353227886612&redirect_uri=http%3A%2F%2F192.168.43.243%3A8000&response_type=token&scope=identify%20guilds";
+            loginLink.href = "https://discord.com/api/oauth2/authorize?client_id=710067353227886612&redirect_uri=http%3A%2F%2F192.168.43.243%3A8000%2Findex&response_type=token&scope=identify%20guilds";
             loginLink.innerHTML = "login";
             loginLink.id = "login-link"
             userDiv.appendChild(loginLink);
@@ -67,7 +67,7 @@ function initializeUser() {
             logoutButton.onclick = function() {
                 window.localStorage.removeItem('token');
                 window.localStorage.removeItem('gid');
-                window.location.reload();
+                window.location.href = '/home'
             }
             logoutButton.innerText = 'logout';
             userTextDiv.appendChild(logoutButton);
@@ -88,6 +88,6 @@ function guildSelectionChange() {
 
 function loadPage(path) {
     if (path == '/home') return window.location.href = path;
-    if (window.localStorage.token === undefined) return location.href = '/unauth';
+    if (window.localStorage.token === undefined || window.localStorage.token === 'null') return location.href = '/unauth';
     window.location.href = `${path}/${window.localStorage.gid}`;
 }
