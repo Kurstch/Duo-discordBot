@@ -85,7 +85,8 @@ module.exports = {
                 {name: 'Users', value: usersFieldValue, inline: true},
                 {name: 'Score', value: scoreFieldValue, inline: true},
                 {name: 'Upvotes/Downvotes', value: upvotesDownvotesFieldValue, inline: true}
-            );
+            )
+            .setColor('ORANGE');
             return message.channel.send(embed);
         })
         .catch(err => {console.error(err)});
