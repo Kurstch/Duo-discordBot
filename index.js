@@ -13,6 +13,7 @@ app.discordClient.once('ready', () => {
                 c.messages.fetch();
             }).catch(err => {console.error(err)});
         }
+        app.discordClient.user.setActivity("_help", {type: "WATCHING"});
     }
     catch (err) {
         console.error(err);
