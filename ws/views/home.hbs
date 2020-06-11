@@ -1,1 +1,73 @@
-Home
+
+<link rel="stylesheet" type="text/css" href="/css/home.css">
+
+<div class="page">
+
+    <header>
+        <img src="/images/DUO.png" alt="Duo avatar">
+        <h1>Duo Discord bot</h1>
+        </div>
+    </header>
+
+    <div class="description">
+        <h4>Introduces voting in your Discord server</h4>
+        <h5>- Vote by reacting to a message with 👍 or 👎</h5>
+        <h4>A server member can see their score any time</h4>
+        <h5>- Ask for your score or the score of others with _score or _lead</h5>
+        <h5>
+            - Scores are saved both server wide and locally for each channel<br>
+            so you can see how active people are in the server or in a specific channel
+        </h5>
+    </div>
+
+    <div class="panels">
+
+        <div class="panel">
+            <h3>Commands</h3>
+            <dl>
+                <dt>_score</dt>
+                <dd>
+                    Replies with your score
+                    <dl>
+                        <dt>Optional: @user mention</dt>
+                        <dd>Replies with scores for mentioned users</dd>
+                        <dt>Optional: #channel mention</dt>
+                        <dd>Replies only with score recieved in the mentioned channel</dd>
+                    </dl>
+                </dd>
+                <dt>_leaderboard</dt>
+                    <dd>also: _lead</dd>
+                    <dd>
+                        Replies with the server's leaderboard
+                        <dl>
+                            <dt>Optional: #channel mention</dt>
+                            <dd>Replies with te channel's leaderboard</dd>
+                            <dt>Sorting</dt>
+                            <dd>Option: downvotes<br>sorts the leaderboard by downvotes</dd>
+                            <dd>Option: upvotes<br>sorts the leaderboard by upvotes</dd>
+                        </dl>
+                    </dd>
+                <dt>_help</dt>
+                <dd>Replies with info about bot</dd>
+            </dl>
+        </div>
+
+        <div class="panel">
+            <h3>Fututre updates</h3>
+            <dl>
+                <dt>Emoji</dt>
+                <dd>Add the ability to configure, for each guild, whitch emoji are used for voting</dd>
+                <dt>Roles</dt>
+                <dd>
+                    Add more configurability to roles<br>
+                    i.e. edit permissions, hoist
+                </dd>
+                <dd>Add a color picker for easier role editing</dd>
+            </dl>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/home.js"></script>

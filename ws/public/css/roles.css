@@ -1,7 +1,8 @@
 .panels {
     display: flex;
     justify-content: space-between;
-    padding-left: 30px;
+    padding: 30px;
+    padding-left: 60px;
 }
 
 /* roles panel */
