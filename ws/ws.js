@@ -32,7 +32,8 @@ class WebSocket {
 
         this.express.post('/updateRoles', (req, res) => {
             //check if token is provided
-            if (!req.body.token) return res.render('message', {title: "unauth"});
+            if (!req.body.token) return res.render('unauth', {title: "unauth"});
+
             fetch("https://discordapp.com/api/users/@me/guilds", {
                 method: "GET",
                 headers: {
