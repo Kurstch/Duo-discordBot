@@ -4,8 +4,12 @@ function initializeSidebar() {
 }
 
 function initializeGuildSelect() {
-    //get all guilds the user is a member in
-    //if user is the guilds owner - add the guild to navigation bar guilds selector
+    // If user hasn't logged in return
+
+    if (window.localStorage.token === undefined || window.localStorage.token == 'null') return;
+
+    // Get all guilds the user is a member in
+    // If user is the guild's owner, add the guild to navigation bar guilds selector
     
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "https://discordapp.com/api/users/@me/guilds");
@@ -22,6 +26,9 @@ function initializeGuildSelect() {
                 document.getElementById("guilds").appendChild(select);
             }
         });
+
+        // Save currently selected guild's id to local storage
+
         if (!window.localStorage.gid) {
             window.localStorage.gid = document.getElementById('guilds').options[0].value;  
         }
@@ -31,6 +38,20 @@ function initializeGuildSelect() {
 }
 
 function initializeUser() {
+    // If user hasn't logged in, create a login link and return
+
+    if (window.localStorage.token === undefined || window.localStorage.token == 'null') {
+        const userDiv = document.getElementById("user");
+        const loginLink = document.createElement("a");
+        loginLink.href = "https://discord.com/api/oauth2/authorize?client_id=710067353227886612&redirect_uri=http%3A%2F%2F192.168.43.243%3A8000%2Findex&response_type=token&scope=identify%20guilds";
+        loginLink.innerHTML = "login";
+        loginLink.id = "login-link"
+        userDiv.appendChild(loginLink);
+        return;
+    }
+
+    // Get user data to display in the nav bar
+
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "https://discordapp.com/api/users/@me");
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -38,42 +59,36 @@ function initializeUser() {
     xhr.onload = function() {
         var response = JSON.parse(xhr.response);
         const userDiv = document.getElementById("user");
-        if (!response.id) {
-            const loginLink = document.createElement("a");
-            loginLink.href = "https://discord.com/api/oauth2/authorize?client_id=710067353227886612&redirect_uri=http%3A%2F%2F192.168.43.243%3A8000%2Findex&response_type=token&scope=identify%20guilds";
-            loginLink.innerHTML = "login";
-            loginLink.id = "login-link"
-            userDiv.appendChild(loginLink);
+
+        // If user doesn't have an avatar, use default discord avatar
+
+        const userAvatar = document.createElement("img");
+        if (response.avatar != null) {
+            userAvatar.src = `https://cdn.discordapp.com/avatars/${response.id}/${response.avatar}.png`;
         }
         else {
-            const userAvatar = document.createElement("img");
-            if (response.avatar != null) {
-                userAvatar.src = `https://cdn.discordapp.com/avatars/${response.id}/${response.avatar}.png`;
-            }
-            else {
-                userAvatar.src = "/images/discordDefaultAvatar.png"
-            }
-            userDiv.appendChild(userAvatar);
-
-            const userTextDiv = document.createElement('div');
-            userTextDiv.className = 'user-text';
-
-            const username = document.createElement("small");
-            username.innerHTML = response.username;
-            userTextDiv.appendChild(username);
-
-            const logoutButton = document.createElement('button');
-            logoutButton.className = 'logout-button';
-            logoutButton.onclick = function() {
-                window.localStorage.removeItem('token');
-                window.localStorage.removeItem('gid');
-                window.location.href = '/home'
-            }
-            logoutButton.innerText = 'logout';
-            userTextDiv.appendChild(logoutButton);
-
-            userDiv.appendChild(userTextDiv);
+            userAvatar.src = "/images/discordDefaultAvatar.png"
         }
+        userDiv.appendChild(userAvatar);
+
+        const userTextDiv = document.createElement('div');
+        userTextDiv.className = 'user-text';
+
+        const username = document.createElement("small");
+        username.innerHTML = response.username;
+        userTextDiv.appendChild(username);
+
+        const logoutButton = document.createElement('button');
+        logoutButton.className = 'logout-button';
+        logoutButton.onclick = function() {
+            window.localStorage.removeItem('token');
+            window.localStorage.removeItem('gid');
+            window.location.href = '/home'
+        }
+        logoutButton.innerText = 'logout';
+        userTextDiv.appendChild(logoutButton);
+
+        userDiv.appendChild(userTextDiv);
     }
     xhr.send();
 }
