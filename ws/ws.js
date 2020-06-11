@@ -22,7 +22,7 @@ class WebSocket {
 
         this.registerRoots(app);
 
-        this.server = this.express.listen(app.config.ws.port, () => {
+        this.server = this.express.listen(8000, () => {
             console.log(`listening on port ${this.server.address().port}`)
         });
     }
