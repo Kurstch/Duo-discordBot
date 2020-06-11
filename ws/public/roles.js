@@ -114,7 +114,7 @@ function updateRoles() {
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", `http://${location.hostname}:${location.port}/updateRoles`);
+    xhr.open("POST", `https://${location.hostname}:${location.port}/updateRoles`);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({
         token: window.localStorage.token,
