@@ -11,6 +11,7 @@ module.exports = {
         var mongoFilter;
 
         // Set mongoCollection
+
         if (!message.mentions.channels.size) {
             mongoCollection = 'Users';
         }
@@ -21,7 +22,8 @@ module.exports = {
             mongoCollection = message.mentions.channels.first().id;
         }
 
-        //Set mongoFilter
+        // Set mongoFilter
+
         if (!message.mentions.users.size) {
             mongoFilter = {_id: message.author.id};
         }
@@ -32,7 +34,6 @@ module.exports = {
             mongoFilter = {_id: {$in: array}};
         }
 
-        // Ask for data and process it
         app.mongodb.read(
             app.mongoClient,
             message.guild.id,
@@ -41,10 +42,12 @@ module.exports = {
         )
         .then(data => {
             if (!data.length) {
-            return message.channel.send('I could not find anything, sorry!');
+                return message.channel.send('I could not find anything, sorry!');
             }
 
             var reply;
+
+            // If message has user mentions reply with data for all of the users, else adress the reply specificly to the message author
 
             if (message.mentions.users.size) {
                 reply = message.mentions.users.map(user => {
@@ -58,7 +61,7 @@ module.exports = {
             else {
                 reply = `Your score is \`${data[0].score}\`, upvotes: \`${data[0].upvotes}\`, downvotes: \`${data[0].downvotes}\``;
             }
-            return message.channel.send(reply);
+            message.channel.send(reply);
         })
         .catch(err => console.error(err));
     }

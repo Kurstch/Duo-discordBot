@@ -20,7 +20,8 @@ module.exports.updateUserRoles = async(roles, user, userScore) => {
         }
     }
 
-    // check if user has any of the autoroles
+    // Check if user has any of the auto roles
+
     for (const role of user.roles.cache) {
         if (role[1].name == '@everyone') continue;
         for (var i = 0; i < Object.keys(roles).length; i++) {
@@ -30,14 +31,15 @@ module.exports.updateUserRoles = async(roles, user, userScore) => {
                     if (role[1].name !== roleObject.name) {
                         await user.roles.remove(role);
                     }
-                }
-                catch {await user.roles.remove(role);} // If there is an error (roleObject is null), that means user doesn't have enough score for any role 
+                } // If there is an error (roleObject is null), that means user doesn't have enough score for any role and the role should be removed
+                catch {await user.roles.remove(role);} 
             }
         }
     }
     if (roleObject === null) return;
 
-    // grant user the role
+    // Try to find the role in the guild
+
     var role = await user.guild.roles.cache.find(role => role.name === roleObject.name);
 
     var color;
@@ -63,5 +65,7 @@ module.exports.updateUserRoles = async(roles, user, userScore) => {
         user.roles.add(role);
     }
 
+    // This is used to prevent bot from making multiple identical roles
+    // Refer to ws.js:84
     return role;
 }

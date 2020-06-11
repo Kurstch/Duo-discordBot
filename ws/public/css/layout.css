@@ -95,11 +95,11 @@ li a:hover {
 .user a {
     margin-left: 35%;
     text-decoration: none;
-    color: green;
+    color: darkorange
 }
 
 .user a:hover {
-    color: greenyellow;
+    color: orange;
 }
 
 .user-text {

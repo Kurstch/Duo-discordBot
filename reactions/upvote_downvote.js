@@ -1,4 +1,7 @@
 exports.updateUserData = function(app, guildID, collection, filter, update, user) {
+    // Update user data for both the guild and the channel
+    // Then check if the user has enough score for a new role
+
     app.mongodb.update(
         app.mongoClient,
         guildID,
@@ -21,7 +24,8 @@ exports.updateUserData = function(app, guildID, collection, filter, update, user
 }
 
 function checkForRoleUpdate(app, guildID, userData, user) {
-    // Try to find a document in the config collection
+    // Try to find a Roles document in the Config collection
+    
     app.mongodb.read(
         app.mongoClient,
         guildID,
@@ -32,10 +36,7 @@ function checkForRoleUpdate(app, guildID, userData, user) {
         var roles;
         const userScore = userData.score;
 
-        // Check if guild has custom set roles, if not: use default from config
-        // Then check if user has enough score, if no: return
-        // Then try to find the role in the guild, if it doesn't exist: create it, and add user to the role
-        // If the user is already in one of the roles: remove the user from it
+        // Check if guild has custom set roles, if not use default from config.json
 
         if (data.length) {
             roles = data[0];

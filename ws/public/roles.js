@@ -1,3 +1,6 @@
+// Save all loaded roles into an array
+// Only these role will the bot be allowed to delete
+
 const loadedNames = document.getElementsByName('name');
 const loadedRoles = [];
 for (i = 0; i < loadedNames.length; i++) {
@@ -58,7 +61,7 @@ function addRole() {
 }
 
 function removeRole(sender) {
-    var roleToRemove = sender.parentNode.parentNode.children[1].children[0].value;
+    var roleToRemove = sender.parentNode.parentNode.children[2].children[0].children[0].value;
     if (loadedRoles.includes(roleToRemove)) {
         removedRoles.push(roleToRemove);
     }
@@ -79,6 +82,9 @@ function updateRoles() {
     var scores = document.getElementsByName('score');
     var colors = document.getElementsByName('color');
 
+    // Since role values are given in seperate arrays i.e. names, scores, colors, we have to combine values into objects
+    // Roles have to be sorted by score so that updateUserRoles works properly
+
     var rolesArray = [];
     for (i = 0; i < names.length; i++) {
         var color;
@@ -88,7 +94,7 @@ function updateRoles() {
             color[1] = Number(color[1]);
             color[2] = Number(color[2]);
         }
-        else color = colors[i].value
+        else color = colors[i].value;
         rolesArray.push({
             name: names[i].value,
             score: Number(scores[i].value),
@@ -99,6 +105,8 @@ function updateRoles() {
         return a.score - b.score;
     });
     rolesArray.reverse();
+
+    // Because of how mongoDB stores data, it's best to make an object (roles) that contains role objects
 
     var roles = {};
     for (const index in rolesArray) {

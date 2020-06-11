@@ -11,6 +11,7 @@ module.exports = {
         var embedTitle;
 
         // Set mongoCollection and embedTitle values
+
         if (!message.mentions.channels.size) {
             mongoCollection = 'Users';
             embedTitle = 'Server leaderboard';
@@ -30,6 +31,9 @@ module.exports = {
             {}
         )
         .then(data => {
+
+            // Loop through all users in the guild, get their data from mongo and insert it into leaderboardData array
+
             const leaderboardData = message.guild.members.cache
             .filter(e => e.user.bot === false)
             .map(user => {
@@ -51,6 +55,7 @@ module.exports = {
             });
 
             // Sort leaderboardData
+
             if (args.includes('upvotes')) {
                 leaderboardData.sort((a, b) => {
                     return a.upvotes - b.upvotes;
@@ -68,7 +73,9 @@ module.exports = {
             }
             leaderboardData.reverse();
 
-            // Define field values
+            // Lefine embed field values
+            // Since discord embeds only allow 3 fields in one line, combine upvotes and downvotes into one field
+            
             const usersFieldValue = leaderboardData.map(user => {
                 return user.userMention;
             });
