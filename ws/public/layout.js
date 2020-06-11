@@ -43,7 +43,7 @@ function initializeUser() {
     if (window.localStorage.token === undefined || window.localStorage.token == 'null') {
         const userDiv = document.getElementById("user");
         const loginLink = document.createElement("a");
-        loginLink.href = "https://discord.com/api/oauth2/authorize?client_id=710067353227886612&redirect_uri=http%3A%2F%2F192.168.43.243%3A8000%2Findex&response_type=token&scope=identify%20guilds";
+        loginLink.href = "https://discord.com/api/oauth2/authorize?client_id=710067353227886612&redirect_uri=https%3A%2F%2Fduo-discordbot.herokuapp.com%2Findex&response_type=token&scope=identify%20guilds";
         loginLink.innerHTML = "login";
         loginLink.id = "login-link"
         userDiv.appendChild(loginLink);

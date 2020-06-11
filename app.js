@@ -14,7 +14,7 @@ class App {
         
         this.mongodb = require('./db/mongodb');
         MongoClient.connect(
-            Config.mongodburi,
+            process.env.MONGODBURI,
             { useNewUrlParser: true, useUnifiedTopology: true },
             (err, mongoClient) => {
                 if (err) throw console.error(err)

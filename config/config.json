@@ -1,0 +1,37 @@
+{
+    "prefix": "_",
+    "upvoteEmoji": ["👍"],
+    "downvoteEmoji": ["👎"],
+    "defaultRoles": {
+        "Rank0": {
+            "name": "Rank6",
+            "score": 1024,
+            "color": "gold"
+        },
+        "Rank1": {
+            "name": "Rank5",
+            "score": 512,
+            "color": "navy"
+        },
+        "Rank2": {
+            "name": "Rank4",
+            "score": 256,
+            "color": "purple"
+        },
+        "Rank3": {
+            "name": "Rank3",
+            "score": 128,
+            "color": "red"
+        },
+        "Rank4": {
+            "name": "Rank2",
+            "score": 64,
+            "color": "green"
+        },
+        "Rank5": {
+            "name": "Rank1",
+            "score": 32,
+            "color": "aqua"
+        }
+    }
+}

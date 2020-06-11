@@ -1,7 +1,7 @@
 const App = require('./app');
 const app = new App();
 
-app.discordClient.login(app.config.token);
+app.discordClient.login(process.env.TOKEN);
 
 app.discordClient.once('ready', () => {
     //get all messages
