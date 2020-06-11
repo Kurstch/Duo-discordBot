@@ -15,4 +15,6 @@ Accepted reactions: `👍 👎`
 
 DataBase: `mongoDB`
 
-Dashboard: `http://192.168.43.243:8000`
+Host: `Heroku`
+
+Dashboard: `<https://duo-discordbot.herokuapp.com/>`
