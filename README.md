@@ -1,5 +1,9 @@
 ## Duo Discord bot
 
+[Dashboard](https://duo-discordbot.herokuapp.com/)
+
+[Invite link](https://discord.com/oauth2/authorize?client_id=710067353227886612&permissions=2081160439&scope=bot)
+
  Function:
 
     1. implements upvote, downvote function (using reactions),
@@ -16,5 +20,3 @@ Accepted reactions: `👍 👎`
 DataBase: `mongoDB`
 
 Host: `Heroku`
-
-Dashboard: `<https://duo-discordbot.herokuapp.com/>`
