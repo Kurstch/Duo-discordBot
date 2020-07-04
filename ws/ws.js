@@ -51,8 +51,11 @@ class WebSocket {
                 //remove roles from guilds
                 guild = app.discordClient.guilds.cache.find(g => g.id == req.body.guildID);
                 for (var i in req.body.removedRoles) {
-                    var role = guild.roles.cache.find(r => r.name == req.body.removedRoles[i]);
-                    role.delete();
+                    try {
+                        var role = guild.roles.cache.find(r => r.name == req.body.removedRoles[i]);
+                        role.delete();
+                    }
+                    catch {}
                 }
 
                 //update roles in database
