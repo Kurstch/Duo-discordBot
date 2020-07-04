@@ -1,30 +1,26 @@
 body {
     font-family: 'Noto Sans JP', sans-serif;
     margin: 0;
+    color: rgb(200, 200, 200);
 }
 
 /* sidebar */
 aside {
-    position: relative;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
     width: 200px;
     background-color: rgb(30, 30, 33);
     height: 100%;
     position: fixed;
-    overflow: auto;
 }
 
 /* sidebar title */
 .sidebar-title {
     display: flex;
     align-items: center;
-    font-size: 20px;
-    color: white;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.duo-icon {
+.sidebar-title img {
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -33,21 +29,21 @@ aside {
 
 /* sidebar nav */
 nav {
+    padding-top: 20px;
     border-top: 1px solid white;
 }
 
-li a {
+nav a {
     text-align: center;
     display: block;
-    color: rgb(200, 200, 200);
     padding: 12px 16px;
-    font-size: 18px;
-    text-decoration: none;
+    font-size: 20px;
     cursor: pointer;
 }
 
-li a:hover {
-    background-color: rgb(50, 50, 53);
+nav a:hover {
+    color: orange;
+    background-color: rgb(40, 40, 43);
 }
 
 /* sidebar bottom */
@@ -55,7 +51,6 @@ li a:hover {
     position: absolute;
     bottom: 40px;
     left: 15px;
-    color: rgb(200, 200, 200);
 }
 
 /* guild select */
@@ -67,12 +62,11 @@ li a:hover {
     font-size: 16px;
     text-align-last: center;
     background-color: rgb(24, 24, 28);
-    color: rgb(200, 200, 200);
     cursor: pointer;
 }
 
 /* user display */
-.user {
+#user {
     display: flex;
     align-items: center;
     border: none;
@@ -84,7 +78,7 @@ li a:hover {
     background-color: rgb(24, 24, 28);
 }
 
-.user img {
+#user img {
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -92,13 +86,13 @@ li a:hover {
     margin-right: 20px;
 }
 
-.user a {
+#user a {
     margin-left: 35%;
     text-decoration: none;
     color: darkorange
 }
 
-.user a:hover {
+#user a:hover {
     color: orange;
 }
 
