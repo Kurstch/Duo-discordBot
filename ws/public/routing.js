@@ -51,4 +51,8 @@ module.exports.routing = (app, ws) => {
     ws.express.get('/unauth', (req, res) => {
         res.render('unauth', {title: "unauth"});
     });
+
+    ws.express.get('/noGuilds', (req, res) => {
+        res.render('noGuilds', {title: "no guilds found"})
+    });
 }
