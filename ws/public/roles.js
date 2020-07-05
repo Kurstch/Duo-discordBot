@@ -6,7 +6,6 @@ const loadedRoles = [];
 for (i = 0; i < loadedNames.length; i++) {
     loadedRoles.push(loadedNames[i].value);
 }
-var removedRoles = [];
 
 function addRole() {
     const role = document.createElement('div');
@@ -61,10 +60,6 @@ function addRole() {
 }
 
 function removeRole(sender) {
-    var roleToRemove = sender.parentNode.parentNode.children[2].children[0].children[0].value;
-    if (loadedRoles.includes(roleToRemove)) {
-        removedRoles.push(roleToRemove);
-    }
     var elem = sender.parentNode.parentNode;
     elem.parentNode.removeChild(elem);       
 }
@@ -106,6 +101,15 @@ function updateRoles() {
     });
     rolesArray.reverse();
 
+    for (role of rolesArray) {
+        if (loadedRoles.includes(role.name)) {
+            const index = loadedRoles.indexOf(role.name);
+            if (index > -1) {
+                loadedRoles.splice(index, 1);
+            }
+        }
+    }
+
     // Because of how mongoDB stores data, it's best to make an object (roles) that contains role objects
 
     var roles = {};
@@ -120,7 +124,11 @@ function updateRoles() {
         token: window.localStorage.token,
         guildID: window.localStorage.gid,
         roles: roles,
-        removedRoles: removedRoles
+        removedRoles: loadedRoles
     }));
-    removedRoles.length = 0;
+
+    loadedRoles.length = 0;
+    for (i = 0; i < names.length; i++) {
+        loadedRoles.push(names[i].value);
+    }
 }
