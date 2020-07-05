@@ -1,28 +1,28 @@
-
 <link rel="stylesheet" type="text/css" href="/css/home.css">
-
-<div class="page">
 
     <header>
         <img src="/images/DUO.png" alt="Duo avatar">
         <h1>Duo Discord bot</h1>
-        </div>
     </header>
 
     <div class="description">
-        <h4>Introduces voting in your Discord server</h4>
-        <h5>- Vote by reacting to a message with 👍 or 👎</h5>
-        <h4>A server member can see their score any time</h4>
-        <h5>- Ask for your score or the score of others with _score or _lead</h5>
-        <h5>
-            - Scores are saved both server wide and locally for each channel<br>
-            so you can see how active people are in the server or in a specific channel
-        </h5>
+            <dt>Introduces voting in your Discord server</dt>
+            <dd>Vote by reacting to a message with 👍 or 👎</dd>
+            <dt>A server member can see their score any time</dt>
+            <dd>Ask for your score or the score of others with _score or _lead</dd>
+            <dd>
+                Scores are saved both server wide and locally for each channel<br>
+                so you can see how active people are in the server or in a specific channel
+            </dd>
+    </div>
+
+    <div class="panel-select">
+        <button>Commands</button>
+        <button>Future updates</button>
     </div>
 
     <div class="panels">
-
-        <div class="panel">
+        <div id="Commands" class="panel open">
             <h3>Commands</h3>
             <dl>
                 <dt>_score</dt>
@@ -52,8 +52,8 @@
             </dl>
         </div>
 
-        <div class="panel">
-            <h3>Fututre updates</h3>
+        <div id="Future updates" class="panel">
+            <h3>Future updates</h3>
             <dl>
                 <dt>Emoji</dt>
                 <dd>Add the ability to configure, for each guild, whitch emoji are used for voting</dd>
@@ -65,7 +65,6 @@
                 <dd>Add a color picker for easier role editing</dd>
             </dl>
         </div>
-
     </div>
 
-</div>
+    <script src="/home.js"></script>

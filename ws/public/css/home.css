@@ -1,34 +1,33 @@
-.page {
-    margin-top: 40px;
+* {
+    cursor: default;
+    color: #ffffff;
 }
 
 header {
-    color: white;
-    border-bottom: 1px solid orange;
+    margin-top: 40px;
     padding-right: 10%;
     text-align: center;
 }
 
 header img {
     width: 100px;
-    height: 100px;
     border-radius: 50%;
 }
 
 .description {
+    border-top: 3px solid orange;
+    border-bottom: 3px solid orange;
     background-color: rgb(70, 70, 73);
     font-size: 20px;
-    padding-left: 100px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 60px 230px 60px 100px;
 }
 
-.description h4 {
+.description dt {
     color: deepskyblue;
     margin-bottom: 5px;
 }
 
-.description h5 {
+.description dd {
     margin-top: 5px;
     color: azure;
     margin-left: 30px;
@@ -36,26 +35,46 @@ header img {
     margin-bottom: 0px;
 }
 
-.panels {
-    display: flex;
-    justify-content: space-evenly;
-    padding-right: 10%;
-    color: white;
-    border-top: 1px solid orange;
-}
-
-.panels h3 {
+h3 {
     color: orange;
     text-align: center;
 }
 
-.panel {
-    width: 500px;
-    margin-top: 60px;
+.panel-select {
+    padding: 20px 0px 20px 100px;
+}
+
+.panel-select button {
+    background-color: #2d2d30;
+    color: #c8c8c8;
     border-radius: 10px;
+    font-size: 20px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.panel-select button:hover {
+    background-color: #2d2d30;
+    color: #ffffff;
+}
+
+.panel {
+    position: absolute;
+    opacity: 0;
+    right: 200;
+    margin: 20px 0px 20px 100px;
     padding: 10px 20px;
+    width: 60%;
+    border-radius: 10px;
     box-shadow: inset 4px 3px 3px rgb(45, 45, 48);
     background-color: rgb(53, 53, 56);
+    pointer-events: none;
+}
+
+.panel.open {
+    opacity: 1;
+    pointer-events: all;
 }
 
 .panel dl {
@@ -63,15 +82,18 @@ header img {
     text-align: left;
 }
 
-.panel dt {
+.panel > dl > dt {
+    font-size: 22px;
     margin-top: 16px;
     color: lightseagreen;
 }
 
 .panel dd {
+    font-size: 18px;
     margin-bottom: 6px;
 }
 
 .panel dl dl dt {
+    font-size: 20px;
     color: darksalmon;
 }
