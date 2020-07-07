@@ -9,13 +9,13 @@
     display: flex;
 }
 
-img {
+.message img {
     width: 130px;
     height: 130px;
     border-radius: 30%;
 }
 
-h1 {
+.message h1 {
     margin-left: 60px;
     align-self: center;
     color: white;
@@ -25,15 +25,15 @@ h1 {
     margin-left: 190px;
 }
 
-h3 {
+.message h3 {
     color: darkgray;
 }
 
-a {
+.message a {
     color: darkgoldenrod;
     text-decoration: none;
 } 
 
-a:hover {
+.message a:hover {
     color: orange;
 }
