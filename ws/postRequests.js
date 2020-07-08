@@ -1,8 +1,12 @@
 module.exports.postRequests = (app, ws, fetch) => {
     ws.express.post('/updateRoles', (req, res) => {
-        //check if token is provided
-        if (!req.body.token) return res.render('unauth', {title: "unauth"});
+        // Check if token is provided (if user has logged in)
+        if (!req.body.token) {
+            return res.render('unauth', {title: "unauth"});
+        }
 
+
+        // Fetch user info - used to check if user is owner of guild
         fetch("https://discordapp.com/api/users/@me/guilds", {
             method: "GET",
             headers: {
@@ -12,22 +16,27 @@ module.exports.postRequests = (app, ws, fetch) => {
         })
         .then(x => x.json())
         .then(response => {
-
-            //check if user has admin permission
+            // Check if user has owner status
             var guild = response.find(x => x.id == req.body.guildID);
             if (!guild || !guild.owner) return res.sendStatus(403);
 
-            //remove roles from guilds
-            guild = app.discordClient.guilds.cache.find(g => g.id == req.body.guildID);
+
+            // Remove roles from guilds
+            const guild = app.discordClient.guilds.cache.find(
+                g => g.id == req.body.guildID
+            );
             for (var i in req.body.removedRoles) {
                 try {
-                    var role = guild.roles.cache.find(r => r.name == req.body.removedRoles[i]);
+                    var role = guild.roles.cache.find(
+                        r => r.name == req.body.removedRoles[i]
+                    );
                     role.delete();
                 }
                 catch {}
             }
 
-            //update roles in database
+
+            // Update roles in database
             app.mongodb.replace(
                 app.mongoClient,
                 req.body.guildID,
@@ -36,7 +45,8 @@ module.exports.postRequests = (app, ws, fetch) => {
                 req.body.roles
             );
 
-            //update guild user roles
+            
+            // Update guild user roles
             app.mongodb.read(
                 app.mongoClient,
                 req.body.guildID,
@@ -54,7 +64,7 @@ module.exports.postRequests = (app, ws, fetch) => {
 
                     var role = app.updateUserRoles(req.body.roles, member, userScore);
 
-                    // if guild doesn't have one of the auto-roles,
+                    // while the guild doesn't have one of the roles,
                     // wait until it is created
                     while (role === undefined) {}
                 });
