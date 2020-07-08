@@ -34,6 +34,8 @@ nav {
 }
 
 nav a {
+    color: rgb(200, 200, 200);
+    text-decoration: none;
     text-align: center;
     display: block;
     padding: 12px 16px;
