@@ -102,8 +102,14 @@ function guildSelectionChange() {
 }
 
 function loadPage(path) {
-    if (path == '/home') return window.location.href = path;
-    if (window.localStorage.token === undefined || window.localStorage.token === 'null') return location.href = '/unauth';
-    if (window.localStorage.gid === undefined) return location.href = '/noGuilds';
+    // Check if user has logged in
+    if (window.localStorage.token === undefined || window.localStorage.token === 'null') {
+        return location.href = '/unauth';
+    }
+    // Check if user owns any guilds
+    if (window.localStorage.gid === undefined) {
+        return location.href = '/noGuilds';
+    }
+    // Render view with GuildID as route
     window.location.href = `${path}/${window.localStorage.gid}`;
 }
