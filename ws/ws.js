@@ -28,7 +28,7 @@ class WebSocket {
     }
 
     registerRoots(app) {
-        require('./public/routing').routing(app, this);
+        require('./routing').routing(app, this);
 
         this.express.post('/updateRoles', (req, res) => {
             //check if token is provided
