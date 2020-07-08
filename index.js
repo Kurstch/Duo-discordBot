@@ -49,10 +49,10 @@ app.discordClient.on('messageReactionRemove', (reaction, user) => {
 
     var change;
 
-    if (app.config.upvoteEmoji.includes(reaction.emoji.name)) {
+    if (app.config.upvoteEmoji == reaction.emoji.name) {
         change = [-1, -1, 0]
     }
-    else if (app.config.downvoteEmoji.includes(reaction.emoji.name)) {
+    else if (app.config.downvoteEmoji == reaction.emoji.name) {
         change = [1, 0, -1]
     }
     else return;
