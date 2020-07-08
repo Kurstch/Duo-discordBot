@@ -12,8 +12,15 @@ module.exports.routing = (app, ws) => {
     });
 
     ws.express.get('/roles/:gid?', (req, res) => {
+        // Check if proper guild id was given
+        // Check if bot is connected to the guild
         if (isNaN(req.params.gid)) return;
-        if (app.discordClient.guilds.cache.find(g => g.id == req.params.gid) === undefined) return res.render('duoConnectionError', {title: 'Duo not connected'});
+        if (app.discordClient.guilds.cache.find(g => g.id == req.params.gid) === undefined) {
+            return res.render('duoConnectionError', {title: 'Duo not connected'});
+        }
+
+
+        // Get custom roles from mongodb (if they exist) to render in the view
         app.mongodb.read(
             app.mongoClient,
             req.params.gid,
@@ -21,6 +28,11 @@ module.exports.routing = (app, ws) => {
             { _id: 'Roles' }
         )
         .then(data => {
+            /*
+                Check if custom roles (data) was found
+                Asign displayColor for role colorDisplay div
+            */
+
             var roles;
             if (data.length) {
                 roles = data[0];
