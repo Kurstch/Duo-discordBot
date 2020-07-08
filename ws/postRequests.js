@@ -22,7 +22,7 @@ module.exports.postRequests = (app, ws, fetch) => {
 
 
             // Remove roles from guilds
-            const guild = app.discordClient.guilds.cache.find(
+            guild = app.discordClient.guilds.cache.find(
                 g => g.id == req.body.guildID
             );
             for (var i in req.body.removedRoles) {
