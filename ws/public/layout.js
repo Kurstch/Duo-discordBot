@@ -4,13 +4,21 @@ function initializeSidebar() {
 }
 
 function initializeGuildSelect() {
-    // If user hasn't logged in return
+    /*
+        Check if user has logged in
+        Add all guilds the user owns to the guilds select
+        Asign guilds select value
+    */
 
-    if (window.localStorage.token === undefined || window.localStorage.token == 'null') return;
+   const guildSelect = document.getElementById('guilds');
+
+    // If user hasn't logged in, hide guild select
+    if (window.localStorage.token === undefined || window.localStorage.token == 'null') {
+        return guildSelect.style = "opacity:0;pointer-events:none;";
+    }
+
 
     // Get all guilds the user is a member in
-    // If user is the guild's owner, add the guild to navigation bar guilds selector
-    
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "https://discordapp.com/api/users/@me/guilds");
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -18,66 +26,79 @@ function initializeGuildSelect() {
     xhr.onload = function() {
         var response = JSON.parse(xhr.response);
         if(!response[0]) return;
+
+
+        // If user owns the guild, add it to the selection
         response.forEach(guild=>{
             if (guild.owner) {
-                var select = document.createElement("option");
-                select.innerHTML = guild.name;
-                select.value = guild.id;
-                document.getElementById("guilds").appendChild(select);
+                var option = document.createElement("option");
+                option.innerHTML = guild.name;
+                option.value = guild.id;
+                guildSelect.appendChild(option);
             }
         });
 
-        // Save currently selected guild's id to local storage
 
+        // If localStorage does not have gid, set it as the select's first option
+        // Set the guild select value to localStorage.gid
         if (!window.localStorage.gid) {
             window.localStorage.gid = document.getElementById('guilds').options[0].value;  
         }
-        document.getElementById('guilds').value = window.localStorage.gid;
+        guildSelect.value = window.localStorage.gid;
     }
     xhr.send();
 }
 
 function initializeUser() {
-    // If user hasn't logged in, create a login link and return
+    /*
+        Check if user has logged in
+        if not: create a login button
+        else: display user data in aside user div
+    */
 
+    const userDiv = document.getElementById("user");
+
+    // If user hasn't logged in, create a login link and return
     if (window.localStorage.token === undefined || window.localStorage.token == 'null') {
-        const userDiv = document.getElementById("user");
         const loginLink = document.createElement("a");
         loginLink.href = "https://discord.com/api/oauth2/authorize?client_id=710067353227886612&redirect_uri=https%3A%2F%2Fduo-discordbot.herokuapp.com%2Findex&response_type=token&scope=identify%20guilds";
         loginLink.innerHTML = "login";
-        loginLink.id = "login-link"
-        userDiv.appendChild(loginLink);
-        return;
+        return userDiv.appendChild(loginLink);
     }
 
-    // Get user data to display in the nav bar
 
+    // Get user data to display in the nav bar
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "https://discordapp.com/api/users/@me");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Authorization", "Bearer " + window.localStorage.token);
     xhr.onload = function() {
         var response = JSON.parse(xhr.response);
-        const userDiv = document.getElementById("user");
 
-        // If user doesn't have an avatar, use default discord avatar
 
-        const userAvatar = document.createElement("img");
+        // If user has an avatar get it from cdn.discordapp.com/avatars
+        // Else use default discord avatar from public/images directory
+        const userAvatarElem = document.createElement("img");
         if (response.avatar != null) {
-            userAvatar.src = `https://cdn.discordapp.com/avatars/${response.id}/${response.avatar}.png`;
+            userAvatarElem.src = `https://cdn.discordapp.com/avatars/${response.id}/${response.avatar}.png`;
         }
         else {
-            userAvatar.src = "/images/discordDefaultAvatar.png"
+            userAvatarElem.src = "/images/discordDefaultAvatar.png"
         }
-        userDiv.appendChild(userAvatar);
+        userAvatarElem.alt = "user avatar";
+        userDiv.appendChild(userAvatarElem);
 
+
+        // container for username and logout button
         const userTextDiv = document.createElement('div');
         userTextDiv.className = 'user-text';
 
-        const username = document.createElement("small");
-        username.innerHTML = response.username;
-        userTextDiv.appendChild(username);
+        // username
+        const usernameElem = document.createElement("small");
+        usernameElem.innerHTML = response.username;
+        userTextDiv.appendChild(usernameElem);
 
+        // logout button
         const logoutButton = document.createElement('button');
         logoutButton.className = 'logout-button';
         logoutButton.onclick = function() {
